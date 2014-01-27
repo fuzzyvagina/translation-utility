@@ -38,7 +38,7 @@
 	};
 
 
-	$.get('translations/test.json', function(response) {
+	$.get('locales/nl_nl.json', function(response) {
 		json = response;
 
 		$('article').renderJSON(json);
