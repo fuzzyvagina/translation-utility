@@ -1,4 +1,4 @@
-# Translation Utility
+# Translation Utility (this project is very much in Alpha state)
 
 This utility is meant to make the localization of web apps easier by providing a easy to use interfface for editing JSON localization files.
 
