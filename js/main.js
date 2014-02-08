@@ -2,7 +2,9 @@
 
 	'use strict';
 
-	var file = 'translations/nl_nl.json',
+	var file = 'locales/nl_nl.json',
+		$article = $('article'),
+		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
 
 	changeProperty = function ( obj, strProp, newValue ) {
@@ -17,26 +19,34 @@
 	},
 
 	render = function ( response ) {
-		$('article').renderJSON(response);
+		$article.renderJSON(response);
 
-		$('.renderjson-scalar').each(stylise);
-
-		$('.value').on({
-			focus: storeCurrent,
-			blur: checkEdit
+		$('.renderjson-scalar', $article).each(function( key, el ) {
+			htmlToMarkdown(key, el);
+			stylise(el);
 		});
 
-		$('.key').on('click', throwFocus);
+		// $('textarea').autoResize();
 
-		$('article > .renderjson-value > .renderjson-pair > .renderjson-key').click(function ( ev ) {
-			$(ev.currentTarget).next().toggle();
-		});
+$('textarea').elastic();
+
 	},
 
-	stylise = function ( key, el ) {
-		$(el).attr('contenteditable', true).attr('class', 'col-xs-9 value')
+	stylise = function ( el ) {
+		$(el).attr('class', 'col-xs-9 value')
 			.prev().attr('class', 'col-xs-3 key')
 			.parent().attr('class', 'row');
+	},
+
+	htmlToMarkdown = function ( i, el ) {
+		var txt = el.value,
+			md;
+
+		if ( !htmlPattern.test(txt) ) return;
+
+		md = toMarkdown(txt);
+
+		$article.find('[title=\''+el.title+'\']').val(md);
 	},
 
 	storeCurrent = function ( ev ) {
@@ -63,7 +73,7 @@
 	save = function () {
 		var filename = file.split('/').pop(),
 			saveObj = {
-				filename: filename.replace(/\.[^/.]+$/, ""),
+				filename: filename.replace(/\.[^/.]+$/, ''),
 				json: json
 			};
 
@@ -84,8 +94,11 @@
 
 	$.get(file, render);
 
-	$('#reset').on('click', reset);
+	// $article.on('focus', '.value', storeCurrent);
+	// $article.on('blur', '.value', checkEdit);
+	// $article.on('click', '.key', throwFocus);
 
-	$('#save').on('click', save);
+	// $('#reset').on('click', reset);
+	// $('#save').on('click', save);
 
 })();
