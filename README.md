@@ -7,8 +7,9 @@ This utility is meant to make the localization of web apps easier by providing a
 ## Features
 
 * Underscores in keys are converted to spaces.
-* Html in the values is rendered as markdown.
+* Html in the value fields is rendered as markdown.
+* After editing a value a preview is shown.
 
-TODO: convert the markdown back to html on save
-TODO: create previews of what markdown will look like.
+
 TODO: add way to select files
+TODO: improve browser compatibility

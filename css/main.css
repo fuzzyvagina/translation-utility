@@ -92,7 +92,7 @@ header .doc-buttons {
   float: right;
 }
 article {
-  margin: 70px 10%;
+  margin: 70px 2%;
 }
 article > .renderjson-value {
   border: none;
@@ -137,6 +137,7 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
 }
 .value {
   height: 33px;
+  max-height: 500px;
   padding: 6px 12px;
   margin: 0 0 5px;
   font-size: 14px;
@@ -151,6 +152,7 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   resize: none;
+  overflow: auto;
 }
 .value:focus {
   border-color: #66afe9;
@@ -160,6 +162,10 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
 }
 .value.modified {
   box-shadow: 0 0 3px 1px #ffff00, inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.preview {
+  max-height: 500px;
+  overflow: auto;
 }
 /* ==========================================================================
    Helper classes
