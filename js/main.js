@@ -2,7 +2,10 @@
 
 	'use strict';
 
-	var json, currentValue,
+	var file = 'locales/nl_nl.json',
+		$article = $('article'),
+		htmlPattern = /<[a-z][\s\S]*>/i,
+		json, currentValue,
 
 	changeProperty = function ( obj, strProp, newValue ) {
 	    var re = /\["?([^"\]]+)"?\]/g,
@@ -15,10 +18,35 @@
 	        obj[p] = newValue;
 	},
 
-	stylise = function ( key, el ) {
-		$(el).attr('contenteditable', true).attr('class', 'col-xs-9 value')
+	render = function ( response ) {
+		$article.renderJSON(response);
+
+		$('.renderjson-scalar', $article).each(function( key, el ) {
+			htmlToMarkdown(key, el);
+			stylise(el);
+		});
+
+		// $('textarea').autoResize();
+
+$('textarea').elastic();
+
+	},
+
+	stylise = function ( el ) {
+		$(el).attr('class', 'col-xs-9 value')
 			.prev().attr('class', 'col-xs-3 key')
 			.parent().attr('class', 'row');
+	},
+
+	htmlToMarkdown = function ( i, el ) {
+		var txt = el.value,
+			md;
+
+		if ( !htmlPattern.test(txt) ) return;
+
+		md = toMarkdown(txt);
+
+		$article.find('[title=\''+el.title+'\']').val(md);
 	},
 
 	storeCurrent = function ( ev ) {
@@ -29,36 +57,25 @@
 	checkEdit = function ( ev ) {
 		var newValue = ev.currentTarget.innerHTML;
 
-		if ( currentValue !== newValue )
+		if ( currentValue !== newValue ){
 			$(ev.currentTarget).addClass('modified').data('original', currentValue);
+		}
 	},
 
 	throwFocus = function ( ev ) {
 		$(ev.currentTarget).next().focus();
-	};
+	},
 
+	reset = function () {
+		location.reload();
+	},
 
-	$.get('locales/nl_nl.json', function(response) {
-		json = response;
-
-		$('article').renderJSON(json);
-
-		$('.renderjson-scalar').each(stylise);
-
-		$('.value').on({
-			focus: storeCurrent,
-			blur: checkEdit
-		});
-
-		$('.key').on('click', throwFocus);
-
-		$('article > .renderjson-value > .renderjson-pair > .renderjson-key').click(function ( ev ) {
-			$(ev.currentTarget).next().toggle();
-		});
-	}.bind(this));
-
-
-	$('#save').on('click', function() {
+	save = function () {
+		var filename = file.split('/').pop(),
+			saveObj = {
+				filename: filename.replace(/\.[^/.]+$/, ''),
+				json: json
+			};
 
 		$(':focus').blur();
 
@@ -69,12 +86,19 @@
 			changeProperty(json, node, newValue);
 		}).removeClass('modified');
 
-		// TODO: save json to file
-		// $.post('api/save', function ( response ){
-		// 	console.log(response)
-		// });
-		console.log(json)
+		$.post('/save.php', saveObj, function ( response ){
+			console.log(response)
+		});
+	};
 
-	});
+
+	$.get(file, render);
+
+	// $article.on('focus', '.value', storeCurrent);
+	// $article.on('blur', '.value', checkEdit);
+	// $article.on('click', '.key', throwFocus);
+
+	// $('#reset').on('click', reset);
+	// $('#save').on('click', save);
 
 })();
