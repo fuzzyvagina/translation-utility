@@ -23,6 +23,7 @@
 
 			}
 		} else if (typeof obj == 'string') {
+			elem = $('<textarea class="renderjson-value" title="' + path + '">');
 			elem.addClass('renderjson-scalar renderjson-string').html(obj);
 
 		} else if (typeof obj == 'number') {
