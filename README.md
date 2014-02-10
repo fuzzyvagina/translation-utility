@@ -2,7 +2,7 @@
 
 This utility is meant to make the localization of web apps easier by providing a easy to use interfface for editing JSON localization files.
 
-[demo](http://fuzzyvagina.github.io/translation-utility)
+[demo](http://jdwillemse.github.io/translation-utility)
 
 ## Features
 
