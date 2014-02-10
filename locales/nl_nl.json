@@ -1,0 +1,160 @@
+{
+	"code": "nl_nl",
+	"prize_titles": {
+		"default": {
+			"big": "Doe mee!",
+			"small": "Maak kans op intense ervaringen"
+		},
+		"concert": {
+			"big": "Geniet",
+			"small": "van een <br>privé concert"
+		},
+		"africa": {
+			"big": "win",
+			"small": "een rijs <br>naar afrika"
+		},
+		"cook": {
+			"big": "Kook",
+			"small": "met een <br>masterchef"
+		}
+	},
+	"prizes": [{
+			"name": "concert",
+			"description": "Maak je klaar voor het meest intense concert aller tijden. Waylon speelt tijdens dit Côte d'Or concert alleen de nummers die hem inspireren. En het is niet zomaar een concert, want je kunt zelfs nummers aanvragen die jou inspireren. Tijdens het concert maak je ook nog eens kans op het nog niet verschenen album van Waylon. Deel dus snel jouw ervaring van intens plezier en maak kans op een avond om nooit te vergeten. <strong>Er zijn in totaal 50x2 concertkaarten te winnen.</strong>"
+		}, {
+			"name": "africa",
+			"description": "Onvergetelijk en fascinerend, dat is een reis naar Afrika. En tel daar ‘intens’ bij op, want het wordt helemaal georganiseerd door Côte d'Or. Bereid je voor op een wereld van chocolade en ontdek hoe onze boeren dankzij hun passie en toewijding de beste cacaobonen telen. Deel jouw ervaring van intens plezier en maak kans op een intense reis voor twee personen naar Afrika!"
+		}, {
+			"name": "cook",
+			"description": "Ben je een echte kookliefhebber? Dat komt goed uit, want meester patissier Robert van Beckhoven is dat ook. Hij legt je alles uit over desserts en het effect van chocolade. Vervolgens ga je samen met hem een intens dessert bereiden met als speciaal ingrediënt Côte d'Or chocolade. Deel dus snel jouw ervaring van intens plezier en maak kans op deze onvergetelijke kooksessie met Robert van Beckhoven. <strong>Er zijn in totaal 30 workshop-plekken te winnen.</strong>"
+		}],
+	"pages": {
+		"home": {
+			"body": "<p>Je staat op het punt een wereld van intens genieten te betreden. In deze wereld van Côte d’Or maak je kans op één van de volgende Côte d’Or ervaringen:</p><ul class=\"center-list\"><li>Een intense reis naar Afrika</li><li>Een intense kookworkshop met een masterchef</li><li>Een intens privé concert</li></ul><p>Het enige wat je nodig hebt om deze wereld te betreden, is een streepjescode die je vindt op de achterzijde van een Côte d'Or verpakking. Koop dus snel één van onze heerlijke Côte d'Or producten, klik op Enter World en ontdek een wereld van intense ervaringen.</p>"
+		},
+		"enter": {
+			"select": "selecteer",
+			"your_prize": "je prijs!",
+			"step1_title": "upload je foto",
+			"story_placeholder": "Beschrijf jouw ervaring van intens plezier",
+			"examples": "Bekijk voorbeelden",
+			"fb": "facebook",
+			"upload": "uploaden",
+			"step2_title": "Persoonsgegevens",
+			"firstname": "voornaam",
+			"lastname": "achternaam",
+			"email": "e-mailadres",
+			"terms": "Ik ga akkoord met de <a href='/nl_nl/terms' target='_blank'>algemene voorwaarden</a>",
+			"step3_title": "Bedankt voor jouw ervaring",
+			"thanks_text": "Now share to win Nullam id dolor id nibh ultricies vehicula ut id elit. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.",
+			"other_contest_title": "If you liked this try...",
+			"other_contest_body": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.",
+			"other_contest_button": "Ik doe mee",
+			"share_fb": "share on fb",
+			"share_tw": "share on tw",
+			"share_tweet": "tweet tweet "
+		},
+		"leaderboard": {
+			"empty": "Geen inschrijving in deze category."
+		},
+		"story": {
+			"votes": "votes",
+			"vote_button": "Stem voor verhaal",
+			"vote_thanks": "Bedankt!",
+			"vote_error": "Er is een fout opgetreden, probeer het opnieuw"
+		},
+		"privacy": {
+			"title": "Privacy"
+		},
+		"terms": {
+			"title": "Terms and conditions"
+		}
+	},
+	"ui": {
+		"back": "Terug",
+		"next": "Volgende",
+		"close": "Sluit",
+		"enter": "Enter",
+		"submit": "Bevestig",
+		"home": "home",
+		"photos+videos": "foto’s &amp; video’s"
+	},
+	"nav": {
+		"prizes": [{
+				"link": "concert",
+				"text": "Concert"
+			}, {
+				"link": "africa",
+				"text": "Reis"
+			}, {
+				"link": "cook",
+				"text": "Koken"
+			}],
+		"home": "home",
+		"participate": "Enter world",
+		"leaderboard": "Kanshebbers"
+	},
+	"modals": {
+		"media": {
+			"videos": "Video’s",
+			"photos": "Foto’s",
+			"videos_intro": "Bekijk hier de intense video’s die zullen worden geschoten tijdens de campagne.",
+			"photos_intro": "Bekijk hier de intense foto’s die zullen worden geschoten tijdens de campagne."
+		},
+		"partners": {
+			"title": "cote d‘or partners for the best",
+			"body": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies.</p><p>Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate.</p>"
+		},
+		"barcode": {
+			"title": "Vul de streepjescode in",
+			"body": "Om kans te maken op een intense Côte d’Or ervaring heb je een Côte d'Or product nodig. Op de achterzijde hiervan vind je de streepjescode."
+		},
+		"fb_photos": {
+			"choose": "Choose from Photos",
+			"browse": "Browse your albums until you find a picture you want to use",
+			"select_album": "Select an album",
+			"select_photo": "Select a new photo",
+			"photos_selected": "photos selected",
+			"back": "Back to albums",
+			"prev": "Previous",
+			"next": "Next",
+			"page": "Page",
+			"ok": "OK",
+			"cancel": "Cancel"
+		}
+	},
+	"footer": {
+		"privacy": "privacy",
+		"terms": "terms",
+		"faq": "faq",
+		"contact": "contact",
+		"fb_link": "https://www.facebook.com/CotedorNL",
+		"contact_link": "https://contactus.mdlzapps.com/form?siteId=8KMDxO5Kqd7CyRcnQ2nq1ysRDwKRu9XDUxM88D4izOw%3d",
+		"copyright": "©2014 Mondelez Nederland Services B.V.<br>Alle rechten voorbehouden"
+	},
+	"errors": {
+		"0": "Er is een fout opgetreden",
+		"2": "Er is een databasefout opgetreden",
+		"4": "Er is een probleem met jouw gekozen foto",
+		"5": "Jouw foto is te groot",
+		"6": "Jouw foto is te klein",
+		"7": "Jouw foto is niet opgeslagen",
+		"11": "Dit is geen afbeelding",
+		"12": "Het bestand wordt niet ondersteund",
+		"18": "Je mag op dit moment niet stemmen",
+		"19": "Jouw streepjescode is niet geldig",
+		"20": "Je moet ons toestemming geven",
+		"21": "Selecteer een prijs om verder te gaan",
+		"22": "Vul alle velden in",
+		"23": "Dit is geen geldig e-mailadres"
+
+	},
+	"email": {
+		"subject": "Côte d’Or intense pleasure",
+		"snippet": "Verzamel stemmen voor jouw ervaring",
+		"body": "<p>Beste %NAME%,</p><p>Bedankt voor het delen van jouw ervaring van intens plezier. Je hebt tot %PHASE_END% de tijd om zoveel mogelijk stemmen te verzamelen. Deel de onderstaande URL met al je vrienden en familie en maak kans op %PRIZE%.</p><p>%URL%</p><p>Met vriendelijke groet,</p><p>Côte d’Or</p><p>&nbsp;</p>",
+		"prize_africa": "een intense reis naar Afrika",
+		"prize_concert": "geniet van een intens privé concert",
+		"prize_cook": "een intense kookworkshop met een masterchef"
+	}
+}
