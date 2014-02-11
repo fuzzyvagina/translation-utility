@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var tmpfile = 'locales/nl_nl.json',
+	var masterfile = 'locales/nl_nl.json',
 		$article = $('article'),
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
@@ -83,11 +83,11 @@
 	},
 
 	save = function () {
-		var filename = file.split('/').pop(),
+		var filename = masterfile.split('/').pop(),
 			saveObj = {
 				filename: filename.replace(/\.[^/.]+$/, ''),
 				json: json
-			};
+			}, modified;
 
 		$(':focus').blur();
 
@@ -96,11 +96,14 @@
 				newValue = el.$preview.val();
 
 			changeProperty(json, node, newValue);
+			modified = 1;
 		}).removeClass('modified');
+
+		if ( !modified ) return;
 
 		$.post('/save.php', saveObj, function ( response ){
 			json = saveObj;
-			window.open(response)
+			window.open(response);
 		});
 	},
 
@@ -108,7 +111,7 @@
 		$.get(file, render);
 	};
 
-	loadFile(tmpfile);
+	loadFile(masterfile);
 
 	$('#upload').fileupload({
 		dataType: 'json',
