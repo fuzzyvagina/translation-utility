@@ -101,10 +101,13 @@
 
 		if ( !modified ) return;
 
-		$.get('save.php', saveObj, function ( response ) {
-			json = saveObj;
-			window.open(response);
-		});
+		console.log(json);
+		alert('The JSON object to save has been logged');
+
+		// $.post('save.php', saveObj, function ( response ) {
+		// 	json = saveObj;
+		// 	window.open(response);
+		// });
 	},
 
 	loadFile = function ( file ) {
