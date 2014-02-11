@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var file = 'locales/nl_nl.json',
+	var tmpfile = 'locales/nl_nl.json',
 		$article = $('article'),
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
@@ -54,22 +54,28 @@
 		if ( currentValue !== ev.currentTarget.value ){
 			$(ev.currentTarget).addClass('modified').data('original', currentValue);
 
-			renderPreview(ev.currentTarget);
+			previewChanges(ev.currentTarget);
 		}
 	},
 
-	renderPreview = function ( el ) {
-		var html = markdown.toHTML(el.value);
+	previewChanges = function ( el ) {
+		var html = marked(el.value);
 
 		if ( !el.$preview) {
 			el.$preview = $('<div class="preview col-xs-5"/>').insertAfter(el);
 		}
 
-		// TODO: make this test more foolproof
-		// if ( html.split('<p>').length-1 === 1 )
-		// 	html = html.replace(/[\<p\>|\<\/p\>]/gi, '');
+		// if el has only one p tag remove it.
+		if ( html.split('<p>').length-1 === 1 )
+			html = html.replace(/(\<p\>|\<\/p\>)/gi, '');
 
 		el.$preview.html(html);
+	},
+
+	upload = function ( ev ) {
+		// console.log(ev.currentTarget.value);
+
+		// loadFile(ev.currentTarget.value);
 	},
 
 	reset = function () {
@@ -96,13 +102,38 @@
 			json = saveObj;
 			console.log(response)
 		});
+	},
+
+	loadFile = function ( file ) {
+		$.get(file, render);
 	};
 
-	$.get(file, render);
+	loadFile(tmpfile);
+
+	$('#upload').fileupload({
+		dataType: 'json',
+		done: function (e, data) {
+			console.log(e, data);
+			$.each(data.result.files, function (index, file) {
+				$('<p/>').text(file.name).appendTo(document.body);
+			});
+		}
+	});
+
+
+	marked.setOptions({
+		renderer: new marked.Renderer(),
+		gfm: false,
+		breaks: true,
+		sanitize: true,
+		smartLists: true,
+		smartypants: true
+	});
 
 	$article.on('focus', '.value', storeCurrent);
 	$article.on('blur', '.value', checkEdit);
 
+	$('#upload').on('change', upload);
 	$('#reset').on('click', reset);
 	$('#save').on('click', save);
 
