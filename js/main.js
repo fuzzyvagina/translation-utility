@@ -7,7 +7,7 @@
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
 
-	changeProperty = function ( obj, strProp, newValue ) {
+	changeJsonValue = function ( obj, strProp, newValue ) {
 		var re = /\["?([^"\]]+)"?\]/g,
 			m, p;
 
@@ -87,19 +87,19 @@
 			saveObj = {
 				filename: filename.replace(/\.[^/.]+$/, ''),
 				json: json
-			}, modified;
+			}, isModified;
 
 		$(':focus').blur();
 
 		$('.modified').each(function(key, el) {
 			var node = el.title,
-				newValue = el.$preview.val();
+				newValue = el.$preview.html();
 
-			changeProperty(json, node, newValue);
-			modified = 1;
+			changeJsonValue(json, node, newValue);
+			isModified = 1;
 		}).removeClass('modified');
 
-		if ( !modified ) return;
+		if ( !isModified ) return;
 
 		$.post('/save.php', saveObj, function ( response ){
 			json = saveObj;
