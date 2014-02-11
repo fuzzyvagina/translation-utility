@@ -14,6 +14,7 @@ This utility is meant to make the localization of web apps easier by providing a
 TODO: remove the paragraph tags that are added when makdown is parsed
 TODO: add way to select files
 TODO: add error handling to php save
-TODO: improve browser compatibility
 TODO: height jumps on blur of single line items
 TODO: fix overflow isseus on single line items
+
+This app was created for internal use so has not been x-browser tested.

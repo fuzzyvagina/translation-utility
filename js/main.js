@@ -66,8 +66,8 @@
 		}
 
 		// TODO: make this test more foolproof
-		if ( html.split('<p>').length-1 === 1 )
-			html = html.replace(/[\<p\>|\<\/p\>]/gi, '');
+		// if ( html.split('<p>').length-1 === 1 )
+		// 	html = html.replace(/[\<p\>|\<\/p\>]/gi, '');
 
 		el.$preview.html(html);
 	},
