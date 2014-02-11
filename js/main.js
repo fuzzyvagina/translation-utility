@@ -93,7 +93,7 @@
 
 		$('.modified').each(function(key, el) {
 			var node = el.title,
-				newValue = el.$preview.val();
+				newValue = el.$preview.html();
 
 			changeProperty(json, node, newValue);
 			modified = 1;
