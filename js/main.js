@@ -101,7 +101,7 @@
 
 		if ( !modified ) return;
 
-		$.post('/save.php', saveObj, function ( response ){
+		$.post('save.php', saveObj, function ( response ){
 			json = saveObj;
 			window.open(response);
 		});
