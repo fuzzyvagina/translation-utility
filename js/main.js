@@ -103,7 +103,7 @@
 
 		$.post('/save.php', saveObj, function ( response ){
 			json = saveObj;
-			console.log(response)
+			window.open(response);
 		});
 	},
 
