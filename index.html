@@ -20,8 +20,11 @@
 
         <header class="navbar navbar-fixed-top">
             <div class="doc-buttons">
-                <button id="reset" type="button" class="btn btn-primary">Reset changes</button>
-                <button id="save" type="button" class="btn btn-default">Save</button>
+                <span class="btn btn-default btn-file">
+                    Upload&hellip; <input id="upload" type="file" accept="application/json">
+                </span>
+                <button id="reset" type="button" class="btn btn-default">Reset</button>
+                <button id="save" type="button" class="btn btn-primary">Save</button>
             </div>
             <h3>Translation utility</h3>
         </header>
@@ -29,15 +32,22 @@
         <article>
         </article>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
         <script src="js/vendor/jquery.renderjson.js"></script>
         <script src="js/vendor/jquery.elastic.source.js"></script>
+
         <script src="js/vendor/to-markdown.js"></script>
         <script src="js/vendor/html2markdown.js"></script>
         <script src="js/vendor/htmlparser.js"></script>
         <script src="js/vendor/htmldomparser.js"></script>
-        <script src="js/vendor/markdown.js"></script>
+
+        <script src="js/vendor/marked.js"></script>
+
+        <script src="js/vendor/jquery.ui.widget.js"></script>
+        <script src="js/vendor/jquery.iframe-transport.js"></script>
+        <script src="js/vendor/jquery.fileupload.js"></script>
+
         <script src="js/main.js"></script>
     </body>
 </html>

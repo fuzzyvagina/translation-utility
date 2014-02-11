@@ -142,11 +142,11 @@
 
 				// Compact textarea on blur
 				$textarea.bind('blur',function(){
-					if($twin.height() < maxheight){
-						if($twin.height() > minheight) {
-							$textarea.height($twin.height());
+					if($twin.outerHeight() < maxheight){
+						if($twin.outerHeight() > minheight) {
+							$textarea.outerHeight($twin.outerHeight());
 						} else {
-							$textarea.height(minheight);
+							$textarea.outerHeight(minheight);
 						}
 					}
 				});

@@ -114,6 +114,27 @@ header {
 	}
 }
 
+.btn-file {
+    position: relative;
+    overflow: hidden;
+
+	input[type=file] {
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    min-width: 100%;
+	    min-height: 100%;
+	    font-size: 999px;
+	    text-align: right;
+	    filter: alpha(opacity=0);
+	    opacity: 0;
+	    outline: none;
+	    background: white;
+	    cursor: inherit;
+	    display: block;
+	}
+}
+
 article {
 	margin: 70px 2%;
 
@@ -173,7 +194,7 @@ article {
 }
 
 .value {
-	height: 33px;
+	height: 34px;
 	max-height: 500px;
 	padding: 6px 12px;
 	margin: 0 0 5px;
@@ -206,6 +227,7 @@ article {
 
 .preview {
 	max-height: 500px;
+	margin-top: 6px;
 	overflow: auto;
 }
 
