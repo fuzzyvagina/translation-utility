@@ -107,13 +107,7 @@
 		});
 	},
 
-	loadFile = function ( file ) {
-		$.get(file, render);
-	};
-
-	loadFile(masterfile);
-
-	document.querySelector('#uploadfile').addEventListener('change', function(e) {
+	uploadFile = function () {
 		var file = this.files[0],
 			fd = new FormData(),
 			xhr;
@@ -138,9 +132,10 @@
 		};
 
 		xhr.send(fd);
-	}, false);
+	};
 
-
+	// upload initial file
+	$.get(masterfile, render);
 
 	marked.setOptions({
 		renderer: new marked.Renderer(),
@@ -157,5 +152,6 @@
 	$('#upload').on('change', upload);
 	$('#reset').on('click', reset);
 	$('#save').on('click', save);
+	$('#uploadfile').on('change', uploadFile);
 
 })();
