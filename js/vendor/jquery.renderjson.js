@@ -12,19 +12,19 @@
 	 */
 	function renderJSON(obj, path) {
 		path = path || 'root';
-		var elem = $('<div class="renderjson-value" title="' + path + '">');
+		var objElem = $('<div class="renderjson-value" title="' + path + '">');
+		var elem = $('<textarea class="renderjson-value" title="' + path + '">');
 
 		if (obj instanceof Array) {
-			elem.addClass('renderjson-array');
+			objElem.addClass('renderjson-array');
 			for (var i = 0; i < obj.length; i++) {
-				var pairElem = $('<div class="renderjson-pair">').appendTo(elem);
+				var pairElem = $('<div class="renderjson-pair">').appendTo(objElem);
 				// $('<div class="renderjson-key">' + i + '</div>').appendTo(pairElem);
 				renderJSON(obj[i], path + "[" + i + "]").appendTo(pairElem);
-
+				elem = objElem;
 			}
 		} else if (typeof obj == 'string') {
-			elem = $('<textarea class="renderjson-value" title="' + path + '">');
-			elem.addClass('renderjson-scalar renderjson-string').html(obj);
+			elem.addClass('renderjson-scalar renderjson-string').text(obj);
 
 		} else if (typeof obj == 'number') {
 			elem.addClass('renderjson-scalar renderjson-number').text(obj);
@@ -37,15 +37,16 @@
 
 		} else {
 			// Object
-			elem.addClass('renderjson-object');
+			objElem.addClass('renderjson-object');
 			for (var key in obj) {
 
 				if (obj.hasOwnProperty(key)) {
-					var pairElem = $('<div class="renderjson-pair">').appendTo(elem);
+					var pairElem = $('<div class="renderjson-pair">').appendTo(objElem);
 					$('<div class="renderjson-key">' + key.replace(/_/g, ' ') + '</div>').appendTo(pairElem);
 					renderJSON(obj[key], path + '[&quot;' + key + '&quot;]').appendTo(pairElem);
 				}
 			}
+			elem = objElem;
 		}
 
 		return elem;

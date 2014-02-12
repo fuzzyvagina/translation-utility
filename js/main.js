@@ -4,8 +4,17 @@
 
 	var masterfile = 'locales/master.json',
 		$article = $('article'),
+		$alert = $('.alert'),
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
+
+	throwAlert = function ( type, msg ) {
+		setTimeout(function(){
+			$alert.hide().attr('class', 'alert');
+		}, 2500);
+
+		$alert.addClass('alert-'+type).html(msg).show();
+	},
 
 	render = function ( obj ) {
 		json = obj;
@@ -41,7 +50,6 @@
 
 	checkEdit = function ( ev ) {
 		ev.currentTarget.value = ev.currentTarget.value.trim();
-		console.log( ev.currentTarget.value.trim().length);
 
 		if ( currentValue !== ev.currentTarget.value ){
 			$(ev.currentTarget).addClass('modified').data('original', currentValue);
@@ -129,7 +137,7 @@
 
 	save = function () {
 		var saveObj = {
-				filename: json.code,
+				filename: json.code || 'locale',
 				json: json
 			}, isModified;
 
@@ -147,7 +155,8 @@
 
 		$.post('save.php', saveObj, function ( response ){
 			json = saveObj.json;
-			window.open(response);
+			// window.open(response);
+			throwAlert('success', 'Your file was saved succesfully as <strong>'+response+'</strong>')
 		});
 	};
 
