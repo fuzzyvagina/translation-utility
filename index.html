@@ -20,9 +20,14 @@
 
 		<header class="navbar navbar-fixed-top">
 			<div class="doc-buttons">
-				<span class="btn btn-default btn-file">
-					Switch&hellip; <input id="uploadfile" name="uploadfile" type="file" accept="application/json">
-				</span>
+				<div class="btn-group">
+					<span class="btn btn-default btn-file">
+						Master <input class="uploadfile" name="master" type="file" accept="application/json">
+					</span>
+					<span class="btn btn-default btn-file">
+						Locale <input class="uploadfile" name="locale" type="file" accept="application/json">
+					</span>
+				</div>
 				<button id="reset" type="button" class="btn btn-default">Reset</button>
 				<button id="save" type="button" class="btn btn-primary">Save</button>
 			</div>
@@ -30,6 +35,16 @@
 		</header>
 
 		<article>
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+				<h3>Master file</h3>
+				<p>The master file is used to create a new blank locale file. This file contains all the fields that need to be translated.</p>
+				<h3>Locale file</h3>
+				<p>This is the file that will be used on the site.</p>
+				<br>
+				<p><em>If you wish to simply edit an existing translation, upload it as the master file</em></p>
+				</div>
+			</div>
 		</article>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -37,7 +52,6 @@
 		<script src="js/vendor/jquery.renderjson.js"></script>
 		<script src="js/vendor/jquery.elastic.source.js"></script>
 
-		<script src="js/vendor/to-markdown.js"></script>
 		<script src="js/vendor/html2markdown.js"></script>
 		<script src="js/vendor/htmlparser.js"></script>
 		<script src="js/vendor/htmldomparser.js"></script>

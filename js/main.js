@@ -7,9 +7,9 @@
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
 
-	render = function ( response ) {
-		json = response;
-		$article.empty().renderJSON(response);
+	render = function ( obj ) {
+		json = obj;
+		$article.empty().renderJSON(obj);
 
 		$('.renderjson-scalar', $article).each(function( key, el ) {
 			htmlToMarkdown(key, el);
@@ -74,7 +74,7 @@
 		return a;
 	},
 
-	uploadFile = function () {
+	uploadFile = function ( ev ) {
 		var file = this.files[0],
 			fd = new FormData(),
 			xhr;
@@ -91,13 +91,19 @@
 					response = JSON.parse(this.response);
 
 				} catch(error) {
-					console.log('response isnt json', error);
+					alert('Your file is not correctly formatted');
 				}
 
 				if ( response ) {
-					var merged = mergeObj(jQuery.extend({}, json), response.dataObj);
+					var obj;
 
-					render(merged);
+					if ( ev.currentTarget.name === 'master' ){
+						obj = response.dataObj
+					} else {
+						obj = mergeObj(jQuery.extend({}, json), response.dataObj);
+					}
+
+					render(obj);
 				}
 			}
 		};
@@ -139,14 +145,15 @@
 
 		if ( !isModified ) return;
 
-		$.post('/save.php', saveObj, function ( response ){
+		$.post('save.php', saveObj, function ( response ){
 			json = saveObj.json;
 			window.open(response);
 		});
 	};
 
 	// upload initial file
-	$.get(masterfile, render);
+	// $.get(masterfile, render);
+
 
 	// initialise markdown preview renderer
 	marked.setOptions({
@@ -162,7 +169,7 @@
 	$article.on('focus', '.value', storeCurrent);
 	$article.on('blur', '.value', checkEdit);
 
-	$('#uploadfile').on('change', uploadFile);
+	$('.uploadfile').on('change', uploadFile);
 	$('#reset').on('click', reset);
 	$('#save').on('click', save);
 
