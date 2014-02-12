@@ -42,7 +42,7 @@
 
 				if (obj.hasOwnProperty(key)) {
 					var pairElem = $('<div class="renderjson-pair">').appendTo(elem);
-					$('<div class="renderjson-key">' + key.replace('_', ' ') + '</div>').appendTo(pairElem);
+					$('<div class="renderjson-key">' + key.replace(/_/g, ' ') + '</div>').appendTo(pairElem);
 					renderJSON(obj[key], path + '[&quot;' + key + '&quot;]').appendTo(pairElem);
 				}
 			}

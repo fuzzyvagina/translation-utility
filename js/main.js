@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var masterfile = 'locales/nl_nl.json',
+	var masterfile = 'locales/master.json',
 		$article = $('article'),
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
@@ -36,10 +36,13 @@
 
 	storeCurrent = function ( ev ) {
 		ev.stopPropagation();
-		currentValue = ev.currentTarget.value;
+		currentValue = ev.currentTarget.value.trim();
 	},
 
 	checkEdit = function ( ev ) {
+		ev.currentTarget.value = ev.currentTarget.value.trim();
+		console.log( ev.currentTarget.value.trim().length);
+
 		if ( currentValue !== ev.currentTarget.value ){
 			$(ev.currentTarget).addClass('modified').data('original', currentValue);
 
@@ -56,9 +59,19 @@
 
 		// if el has only one p tag remove it.
 		if ( html.split('<p>').length-1 === 1 )
-			html = html.replace(/(\<p\>|\<\/p\>)/gi, '');
+			html = html.replace(/(\<p\>|\<\/p\>)/gi, '').replace(/(\r\n|\n|\r)/gm,'');
 
 		el.$preview.html(html);
+	},
+
+	mergeObj = function (a, b) {
+		for (var key in b) {
+			if (key in a) {
+				a[key] = typeof a[key] === 'object' &&
+						typeof b[key] === 'object' ? mergeObj(a[key], b[key]) : b[key];
+			}
+		}
+		return a;
 	},
 
 	uploadFile = function () {
@@ -76,12 +89,16 @@
 				var response;
 				try {
 					response = JSON.parse(this.response);
+
 				} catch(error) {
-					console.log('response isnt json');
+					console.log('response isnt json', error);
 				}
 
-				if ( response )
-					render(response.dataObj);
+				if ( response ) {
+					var merged = mergeObj(jQuery.extend({}, json), response.dataObj);
+
+					render(merged);
+				}
 			}
 		};
 
@@ -105,9 +122,8 @@
 	},
 
 	save = function () {
-		var filename = masterfile.split('/').pop(),
-			saveObj = {
-				filename: filename.replace(/\.[^/.]+$/, ''),
+		var saveObj = {
+				filename: json.code,
 				json: json
 			}, isModified;
 
@@ -150,4 +166,12 @@
 	$('#reset').on('click', reset);
 	$('#save').on('click', save);
 
+
+
+	// add support for old browsers
+	if (typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+			return this.replace(/^\s+|\s+$/g, '');
+		}
+	}
 })();

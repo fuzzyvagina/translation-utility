@@ -1,0 +1,157 @@
+{
+	"code": "",
+	"titles": {
+		"default": {
+			"big": "",
+			"small": ""
+		},
+		"concert": {
+			"big": "",
+			"small": ""
+		},
+		"africa": {
+			"big": "",
+			"small": ""
+		},
+		"cook": {
+			"big": "",
+			"small": ""
+		}
+	},
+	"prizes": [{
+		"name—no_edit": "firstname",
+		"description": ""
+	}, {
+		"name": "",
+		"description": ""
+	}, {
+		"name": "",
+		"description": ""
+	}],
+	"pages": {
+		"home": {
+			"body": ""
+		},
+		"enter": {
+			"fb_caption": "",
+			"fb_description": "",
+			"fb_wall_message": "",
+			"share_tw": "",
+			"share_tweet": ""
+		},
+		"leaderboard": {
+			"empty": ""
+		},
+		"story": {
+			"votes": "",
+			"vote_button": "",
+			"vote_thanks": "",
+			"vote_error": ""
+		},
+		"privacy": {
+			"title": "",
+			"body": ""
+		},
+		"terms": {
+			"title": "",
+			"body": "",
+			"body2": ""
+		}
+	},
+	"examples": [{
+		"index": 1,
+		"exmaple": ""
+	}, {
+		"index": 2,
+		"exmaple": ""
+	}, {
+		"index": 3,
+		"exmaple": ""
+	}, {
+		"index": 4,
+		"exmaple": ""
+	}, {
+		"index": 5,
+		"exmaple": ""
+	}, {
+		"index": 6,
+		"exmaple": ""
+	}],
+	"ui": {
+		"back": "",
+		"next": "",
+		"close": "",
+		"enter": "",
+		"submit": "",
+		"home": "",
+		"photos+videos": "",
+		"partners_link": ""
+	},
+	"nav": {
+		"prizes": [{
+			"link": "",
+			"text": ""
+		}, {
+			"link": "",
+			"text": ""
+		}, {
+			"link": "",
+			"text": ""
+		}],
+		"home": "",
+		"participate": "",
+		"leaderboard": ""
+	},
+	"modals": {
+		"media": {
+			"videos": "",
+			"photos": "",
+			"videos_intro": "",
+			"photos_intro": "",
+			"content": [
+				{
+					"name": "",
+					"video": ""
+				}, {
+					"name": "",
+					"video": ""
+				}, {
+					"name": "",
+					"video": ""
+				}
+			]
+		},
+		"partners": {
+			"title": "",
+			"body": ""
+		},
+		"barcode": {
+			"title": "",
+			"body": ""
+		},
+		"fb_photos": {
+			"choose": "",
+			"browse": "",
+			"select_album": "",
+			"select_photo": "",
+			"photos_selected": "",
+			"back": "",
+			"prev": "",
+			"next": "",
+			"page": "",
+			"ok": "",
+			"cancel": ""
+		}
+	},
+	"footer": {
+		"privacy": "",
+		"terms": "",
+		"faq": "",
+		"contact": "",
+		"fb_link": "",
+		"contact_link": "",
+		"copyright": ""
+	}
+}
+
+
