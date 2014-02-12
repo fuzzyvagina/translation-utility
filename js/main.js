@@ -7,17 +7,6 @@
 		htmlPattern = /<[a-z][\s\S]*>/i,
 		json, currentValue,
 
-	changeJsonValue = function ( obj, strProp, newValue ) {
-		var re = /\["?([^"\]]+)"?\]/g,
-			m, p;
-
-		while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
-			obj = obj[p];
-
-		if (p)
-			obj[p] = newValue;
-	},
-
 	render = function ( response ) {
 		json = response;
 		$article.empty().renderJSON(response);
@@ -72,41 +61,6 @@
 		el.$preview.html(html);
 	},
 
-	upload = function ( ev ) {
-		// console.log(ev.currentTarget.value);
-
-		// loadFile(ev.currentTarget.value);
-	},
-
-	reset = function () {
-		location.reload();
-	},
-
-	save = function () {
-		var filename = masterfile.split('/').pop(),
-			saveObj = {
-				filename: filename.replace(/\.[^/.]+$/, ''),
-				json: json
-			}, isModified;
-
-		$(':focus').blur();
-
-		$('.modified').each(function(key, el) {
-			var node = el.title,
-				newValue = el.$preview.html();
-
-			changeJsonValue(json, node, newValue);
-			isModified = 1;
-		}).removeClass('modified');
-
-		if ( !isModified ) return;
-
-		$.post('/save.php', saveObj, function ( response ){
-			json = saveObj;
-			window.open(response);
-		});
-	},
-
 	uploadFile = function () {
 		var file = this.files[0],
 			fd = new FormData(),
@@ -132,11 +86,53 @@
 		};
 
 		xhr.send(fd);
+	},
+
+	reset = function () {
+		location.reload();
+	},
+
+	// update value in json object to match what changed in editor
+	changeJsonValue = function ( obj, strProp, newValue ) {
+		var re = /\["?([^"\]]+)"?\]/g,
+			m, p;
+
+		while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
+			obj = obj[p];
+
+		if (p)
+			obj[p] = newValue;
+	},
+
+	save = function () {
+		var filename = masterfile.split('/').pop(),
+			saveObj = {
+				filename: filename.replace(/\.[^/.]+$/, ''),
+				json: json
+			}, isModified;
+
+		$(':focus').blur();
+
+		$('.modified').each(function(key, el) {
+			var node = el.title,
+				newValue = el.$preview.html();
+
+			changeJsonValue(json, node, newValue);
+			isModified = 1;
+		}).removeClass('modified');
+
+		if ( !isModified ) return;
+
+		$.post('/save.php', saveObj, function ( response ){
+			json = saveObj.json;
+			window.open(response);
+		});
 	};
 
 	// upload initial file
 	$.get(masterfile, render);
 
+	// initialise markdown preview renderer
 	marked.setOptions({
 		renderer: new marked.Renderer(),
 		gfm: false,
@@ -146,12 +142,12 @@
 		smartypants: true
 	});
 
+	// set events
 	$article.on('focus', '.value', storeCurrent);
 	$article.on('blur', '.value', checkEdit);
 
-	$('#upload').on('change', upload);
+	$('#uploadfile').on('change', uploadFile);
 	$('#reset').on('click', reset);
 	$('#save').on('click', save);
-	$('#uploadfile').on('change', uploadFile);
 
 })();
