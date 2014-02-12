@@ -20,7 +20,7 @@
 
 	render = function ( response ) {
 		json = response;
-		$article.renderJSON(response);
+		$article.empty().renderJSON(response);
 
 		$('.renderjson-scalar', $article).each(function( key, el ) {
 			htmlToMarkdown(key, el);
@@ -113,15 +113,33 @@
 
 	loadFile(masterfile);
 
-	$('#upload').fileupload({
-		dataType: 'json',
-		done: function (e, data) {
-			console.log(e, data);
-			$.each(data.result.files, function (index, file) {
-				$('<p/>').text(file.name).appendTo(document.body);
-			});
-		}
-	});
+	document.querySelector('#uploadfile').addEventListener('change', function(e) {
+		var file = this.files[0],
+			fd = new FormData(),
+			xhr;
+
+		fd.append('uploadfile', file);
+
+		xhr = new XMLHttpRequest();
+		xhr.open('POST', 'upload.php', true);
+
+		xhr.onload = function() {
+			if (this.status == 200) {
+				var response;
+				try {
+					response = JSON.parse(this.response);
+				} catch(error) {
+					console.log('response isnt json');
+				}
+
+				if ( response )
+					render(response.dataObj);
+			}
+		};
+
+		xhr.send(fd);
+	}, false);
+
 
 
 	marked.setOptions({
