@@ -118,6 +118,12 @@
 
         render = function (data) {
             json = data.exportVal();
+
+            if (!json) {
+                $article.html('<h3>Locale not found</h3><p>Make sure the url is correct</p>');
+                return;
+            }
+
             $article.empty().renderJSON(json);
 
             $('.renderjson-scalar', $article).each(function (key, el) {
