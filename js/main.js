@@ -10,15 +10,7 @@
         currentValue,
         locale = window.location.search.replace('?', '') || '',
         fire = new Firebase('https://incandescent-fire-540.firebaseio.com/' + locale),
-
-
-        throwAlert = function (type, msg) {
-            setTimeout(function () {
-                $alert.hide().attr('class', 'alert');
-            }, 2500);
-
-            $alert.addClass('alert-' + type).html(msg).show();
-        },
+        authData = fire.getAuth(),
 
         stylise = function (el) {
             $(el).attr('class', 'col-xs-5 value')
@@ -125,7 +117,6 @@
         },
 
         render = function (data) {
-            console.log('render');
             json = data.exportVal();
             $article.empty().renderJSON(json);
 
@@ -135,6 +126,11 @@
             });
 
             $('textarea').elastic();
+        },
+
+        isLoggedIn = function (ev) {
+            // get data from firebase
+            fire.once('value', render);
         },
 
         authenticate = function (ev) {
@@ -150,8 +146,7 @@
                     alert('ERROR: ' + error.message);
                     console.log('Login Failed!', error);
                 } else {
-                    // get data from firebase
-                    fire.once('value', render);
+                    isLoggedIn();
                 }
             });
 
@@ -176,14 +171,11 @@
 
     $('#reset').on('click', reset);
     $('#save').on('click', save);
-    $('form').on('submit', authenticate);
 
-
-
-    // add support for old browsers
-    if (typeof String.prototype.trim !== 'function') {
-        String.prototype.trim = function () {
-            return this.replace(/^\s+|\s+$/g, '');
-        };
+    if (authData) {
+        isLoggedIn();
+    } else {
+        $('form').on('submit', authenticate);
     }
+
 })(jQuery, Firebase, marked, md);
