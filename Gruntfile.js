@@ -11,8 +11,7 @@ module.exports = function (grunt) {
 
     // Configurable paths for the application
     var appConfig = {
-        app: require('./bower.json').appPath || 'app',
-        dist: 'dist',
+        dist: 'output',
         authConfig: grunt.file.readJSON('./config/auth.json')
     };
 
@@ -22,29 +21,15 @@ module.exports = function (grunt) {
         // Project settings
         appConfig: appConfig,
 
-        // Empties folders to start fresh
-        clean: {
-            dist: {
-                files: [{
-                    dot: true,
-                    src: [
-                        '.tmp',
-                        '<%= appConfig.dist %>/{,*/}*',
-                        '!<%= appConfig.dist %>/.git*'
-                    ]
-                }]
-            },
-            server: '.tmp'
-        },
-
         // Renames files for browser caching purposes
         filerev: {
-            dist: {
+            options: {
+                algorithm: 'md5',
+                length: 8
+            },
+            download: {
                 src: [
-                    '<%= appConfig.dist %>/scripts/{,*/}*.js',
-                    '<%= appConfig.dist %>/styles/{,*/}*.css',
-                    '<%= appConfig.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= appConfig.dist %>/styles/fonts/*'
+                    '<%= appConfig.dist %>/{,*/}*.json'
                 ]
             }
         },
@@ -68,12 +53,14 @@ module.exports = function (grunt) {
             getMyFiles: {
                 options: {
                     mode: 'download',
-                    dest: 'output/'
+                    dest: '<%= appConfig.dist %>/'
                 }
             }
         }
     });
 
+    grunt.loadNpmTasks('grunt-newer');
+    grunt.loadNpmTasks('grunt-filerev');
     grunt.loadNpmTasks('grunt-firebase');
 
     grunt.registerTask('build', [
@@ -93,5 +80,5 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
-    grunt.registerTask('default', ['firebase']);
+    grunt.registerTask('default', ['firebase', 'newer:filerev']);
 };

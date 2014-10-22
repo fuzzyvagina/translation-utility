@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jdwillemse/translation-utility",
   "devDependencies": {
-    "grunt-firebase": "^0.1.4"
+    "grunt-filerev": "^2.1.0",
+    "grunt-firebase": "^0.1.4",
+    "grunt-newer": "^0.8.0"
   }
 }
