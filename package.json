@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jdwillemse/translation-utility/issues"
   },
-  "homepage": "https://github.com/jdwillemse/translation-utility"
+  "homepage": "https://github.com/jdwillemse/translation-utility",
+  "devDependencies": {
+    "grunt-firebase": "^0.1.4"
+  }
 }

@@ -8,7 +8,9 @@
         htmlPattern = /<[a-z][\s\S]*>/i,
         json,
         currentValue,
-        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
+        locale = window.location.search.replace('?', '') || '',
+        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/' + locale),
+
 
         throwAlert = function (type, msg) {
             setTimeout(function () {
@@ -133,13 +135,30 @@
             });
 
             $('textarea').elastic();
+        },
+
+        authenticate = function (ev) {
+            ev.preventDefault();
+
+            var formData = $(this).serializeArray();
+
+            fire.authWithPassword({
+                email: formData[0].value,
+                password: formData[1].value
+            }, function (error, authData) {
+                if (error) {
+                    alert('ERROR: ' + error.message);
+                    console.log('Login Failed!', error);
+                } else {
+                    // get data from firebase
+                    fire.once('value', render);
+                }
+            });
+
         };
 
     // upload initial file
     // $.get(masterfile, render);
-
-    // get data from firebase
-    fire.once('value', render);
 
     // initialise markdown preview renderer
     marked.setOptions({
@@ -157,6 +176,7 @@
 
     $('#reset').on('click', reset);
     $('#save').on('click', save);
+    $('form').on('submit', authenticate);
 
 
 
