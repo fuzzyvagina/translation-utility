@@ -3,7 +3,7 @@
  * Quick HTML visualisation of JSON data
  * github.com/marekweb/jquery-renderjson
  */
-(function($) {
+(function ($) {
 
 	/**
 	 * Renders the given JSON argument as HTML. Recursive for arrays and mapping objects.
@@ -56,7 +56,7 @@
 	 * Render the given JSON data as HTML inserted into the calling jQuery element.
 	 * @param obj JSON data
 	 */
-	$.fn.renderJSON = function(obj) {
+	$.fn.renderJSON = function (obj) {
 		return this.append(renderJSON(obj)).addClass('renderjson-container');
 	};
 })(jQuery);

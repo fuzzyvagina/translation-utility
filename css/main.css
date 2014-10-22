@@ -91,24 +91,14 @@ header .doc-buttons {
   margin-top: 15px;
   float: right;
 }
-.btn-file {
-  position: relative;
-  overflow: hidden;
+.reset {
+  background: transparent;
+  color: #ddd;
+  text-decoration: underline;
+  -webkit-font-smoothing: antialiased;
 }
-.btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 999px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
+.reset:hover {
+  color: #f00;
 }
 article {
   margin: 70px 2%;

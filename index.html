@@ -14,21 +14,21 @@
 		<link rel="stylesheet" href="css/main.css">
 	</head>
 	<body>
-		<!--[if lt IE 8]>
+		<!--[if lt IE 9]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 
 		<header class="navbar navbar-fixed-top">
 			<div class="doc-buttons">
-				<div class="btn-group">
+				<!-- <div class="btn-group">
 					<span class="btn btn-default btn-file">
 						Master <input class="uploadfile" name="master" type="file" accept="application/json">
 					</span>
 					<span class="btn btn-default btn-file">
 						Locale <input class="uploadfile" name="locale" type="file" accept="application/json">
 					</span>
-				</div>
-				<button id="reset" type="button" class="btn btn-default">Reset</button>
+				</div> -->
+				<button id="reset" type="button" class="btn reset">Reset to last save</button>
 				<button id="save" type="button" class="btn btn-primary">Save</button>
 			</div>
 			<h3>Translation utility</h3>
@@ -39,26 +39,18 @@
 		<article>
 			<div class="row">
 				<div class="col-xs-6 col-xs-offset-3">
-				<h3>Master file</h3>
-				<p>The master file is used to create a new blank locale file. This file contains all the fields that need to be translated.</p>
-				<h3>Locale file</h3>
-				<p>This is the file that will be used on the site.</p>
-				<br>
-				<p><em>If you wish to simply edit an existing translation, upload it as the master file</em></p>
+				<h3>Please wait…</h3>
+				<p>The translation file is being loaded.</p>
 				</div>
 			</div>
 		</article>
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="bower_components/jquery/dist/jquery.min.js"><\/script>')</script>
+		<script src="bower_components/firebase/firebase.js"></script>
+		<script src="bower_components/marked/lib/marked.js"></script>
+		<script src="bower_components/html-md/dist/md.min.js"></script>
 		<script src="js/vendor/jquery.renderjson.js"></script>
 		<script src="js/vendor/jquery.elastic.source.js"></script>
-
-		<script src="js/vendor/html2markdown.js"></script>
-		<script src="js/vendor/htmlparser.js"></script>
-		<script src="js/vendor/htmldomparser.js"></script>
-
-		<script src="js/vendor/marked.js"></script>
 
 		<script src="js/main.js"></script>
 	</body>

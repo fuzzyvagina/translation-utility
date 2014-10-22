@@ -1,193 +1,169 @@
-(function() {
+(function ($, Firebase, marked, md) {
 
-	'use strict';
+    'use strict';
 
-	var masterfile = 'locales/master.json',
-		$article = $('article'),
-		$alert = $('.alert'),
-		htmlPattern = /<[a-z][\s\S]*>/i,
-		json, currentValue,
+    var masterfile = 'locales/master.json',
+        $article = $('article'),
+        $alert = $('.alert'),
+        htmlPattern = /<[a-z][\s\S]*>/i,
+        json,
+        currentValue,
+        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
 
-	throwAlert = function ( type, msg ) {
-		setTimeout(function(){
-			$alert.hide().attr('class', 'alert');
-		}, 2500);
+        throwAlert = function (type, msg) {
+            setTimeout(function () {
+                $alert.hide().attr('class', 'alert');
+            }, 2500);
 
-		$alert.addClass('alert-'+type).html(msg).show();
-	},
+            $alert.addClass('alert-' + type).html(msg).show();
+        },
 
-	render = function ( obj ) {
-		json = obj;
-		$article.empty().renderJSON(obj);
+        stylise = function (el) {
+            $(el).attr('class', 'col-xs-5 value')
+                .prev().attr('class', 'col-xs-2 key')
+                .parent().attr('class', 'row');
+        },
 
-		$('.renderjson-scalar', $article).each(function( key, el ) {
-			htmlToMarkdown(key, el);
-			stylise(el);
-		});
+        htmlToMarkdown = function (i, el) {
+            var txt = el.value,
+                markedDown;
 
-		$('textarea').elastic();
-	},
+            if (htmlPattern.test(txt)) {
+                markedDown = md(txt);
+                $article.find('[title=\'' + el.title + '\']').val(markedDown);
+            }
+        },
 
-	stylise = function ( el ) {
-		$(el).attr('class', 'col-xs-5 value')
-			.prev().attr('class', 'col-xs-2 key')
-			.parent().attr('class', 'row');
-	},
+        storeCurrent = function (ev) {
+            ev.stopPropagation();
+            currentValue = ev.currentTarget.value.trim();
+        },
 
-	htmlToMarkdown = function ( i, el ) {
-		var txt = el.value;
+        previewChanges = function (el) {
+            var html = marked(el.value);
 
-		if ( htmlPattern.test(txt) ) {
-			var md = HTML2Markdown(txt);
-			$article.find('[title=\''+el.title+'\']').val(md);
-		}
-	},
+            if (!el.$preview) {
+                el.$preview = $('<div class="preview col-xs-5"/>').insertAfter(el);
+            }
 
-	storeCurrent = function ( ev ) {
-		ev.stopPropagation();
-		currentValue = ev.currentTarget.value.trim();
-	},
+            // if el has only one p tag remove it.
+            if (html.split('<p>').length - 1 === 1) {
+                html = html.replace(/(\<p\>|\<\/p\>)/gi, '').replace(/(\r\n|\n|\r)/gm, '');
+            }
 
-	checkEdit = function ( ev ) {
-		ev.currentTarget.value = ev.currentTarget.value.trim();
+            el.$preview.html(html);
+        },
 
-		if ( currentValue !== ev.currentTarget.value ){
-			$(ev.currentTarget).addClass('modified').data('original', currentValue);
+        checkEdit = function (ev) {
+            ev.currentTarget.value = ev.currentTarget.value.trim();
 
-			previewChanges(ev.currentTarget);
-		}
-	},
+            if (currentValue !== ev.currentTarget.value) {
+                $(ev.currentTarget).addClass('modified').data('original', currentValue);
 
-	previewChanges = function ( el ) {
-		var html = marked(el.value);
+                previewChanges(ev.currentTarget);
+            }
+        },
 
-		if ( !el.$preview) {
-			el.$preview = $('<div class="preview col-xs-5"/>').insertAfter(el);
-		}
+        mergeObj = function (a, b) {
+            for (var key in b) {
+                if (key in a) {
+                    a[key] = typeof a[key] === 'object' &&
+                        typeof b[key] === 'object' ? mergeObj(a[key], b[key]) : b[key];
+                }
+            }
+            return a;
+        },
 
-		// if el has only one p tag remove it.
-		if ( html.split('<p>').length-1 === 1 )
-			html = html.replace(/(\<p\>|\<\/p\>)/gi, '').replace(/(\r\n|\n|\r)/gm,'');
+        reset = function () {
+            location.reload();
+        },
 
-		el.$preview.html(html);
-	},
+        // update value in json object to match what changed in editor
+        changeJsonValue = function (obj, strProp, newValue) {
+            var re = /\["?([^"\]]+)"?\]/g,
+                m, p;
 
-	mergeObj = function (a, b) {
-		for (var key in b) {
-			if (key in a) {
-				a[key] = typeof a[key] === 'object' &&
-						typeof b[key] === 'object' ? mergeObj(a[key], b[key]) : b[key];
-			}
-		}
-		return a;
-	},
+            while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
+                obj = obj[p];
 
-	uploadFile = function ( ev ) {
-		var file = this.files[0],
-			fd = new FormData(),
-			xhr;
+            if (p)
+                obj[p] = newValue;
+        },
 
-		fd.append('uploadfile', file);
+        onSaveFeedback = function (error) {
+            if (error) {
+                alert("Data could not be saved. " + error);
+            } else {
+                console.log("Data saved successfully.");
+            }
+        },
 
-		xhr = new XMLHttpRequest();
-		xhr.open('POST', 'upload.php', true);
+        save = function () {
+            var saveObj = {
+                    filename: json.code || 'locale',
+                    json: json
+                },
+                isModified;
 
-		xhr.onload = function() {
-			if (this.status == 200) {
-				var response;
-				try {
-					response = JSON.parse(this.response);
+            $(':focus').blur();
 
-				} catch(error) {
-					alert('Your file is not correctly formatted');
-				}
+            $('.modified').each(function (key, el) {
+                var node = el.title,
+                    newValue = el.$preview.html();
 
-				if ( response ) {
-					var obj;
+                changeJsonValue(json, node, newValue);
+                isModified = 1;
+            }).removeClass('modified');
 
-					if ( ev.currentTarget.name === 'master' ){
-						obj = response.dataObj
-					} else {
-						obj = mergeObj(jQuery.extend({}, json), response.dataObj);
-					}
+            console.log(json);
 
-					render(obj);
-				}
-			}
-		};
+            if (!isModified) return;
 
-		xhr.send(fd);
-	},
+            fire.set(json, onSaveFeedback);
+        },
 
-	reset = function () {
-		location.reload();
-	},
+        render = function (data) {
+            console.log('render');
+            json = data.exportVal();
+            $article.empty().renderJSON(json);
 
-	// update value in json object to match what changed in editor
-	changeJsonValue = function ( obj, strProp, newValue ) {
-		var re = /\["?([^"\]]+)"?\]/g,
-			m, p;
+            $('.renderjson-scalar', $article).each(function (key, el) {
+                htmlToMarkdown(key, el);
+                stylise(el);
+            });
 
-		while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
-			obj = obj[p];
+            $('textarea').elastic();
+        };
 
-		if (p)
-			obj[p] = newValue;
-	},
+    // upload initial file
+    // $.get(masterfile, render);
 
-	save = function () {
-		var saveObj = {
-				filename: json.code || 'locale',
-				json: json
-			}, isModified;
+    // get data from firebase
+    fire.once('value', render);
 
-		$(':focus').blur();
+    // initialise markdown preview renderer
+    marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: false,
+        breaks: true,
+        sanitize: true,
+        smartLists: true,
+        smartypants: true
+    });
 
-		$('.modified').each(function(key, el) {
-			var node = el.title,
-				newValue = el.$preview.html();
+    // set events
+    $article.on('focus', '.value', storeCurrent);
+    $article.on('blur', '.value', checkEdit);
 
-			changeJsonValue(json, node, newValue);
-			isModified = 1;
-		}).removeClass('modified');
-
-		if ( !isModified ) return;
-
-		$.post('save.php', saveObj, function ( response ){
-			json = saveObj.json;
-			// window.open(response);
-			throwAlert('success', 'Your file was saved succesfully as <strong>'+response+'</strong>')
-		});
-	};
-
-	// upload initial file
-	// $.get(masterfile, render);
-
-
-	// initialise markdown preview renderer
-	marked.setOptions({
-		renderer: new marked.Renderer(),
-		gfm: false,
-		breaks: true,
-		sanitize: true,
-		smartLists: true,
-		smartypants: true
-	});
-
-	// set events
-	$article.on('focus', '.value', storeCurrent);
-	$article.on('blur', '.value', checkEdit);
-
-	$('.uploadfile').on('change', uploadFile);
-	$('#reset').on('click', reset);
-	$('#save').on('click', save);
+    $('#reset').on('click', reset);
+    $('#save').on('click', save);
 
 
 
-	// add support for old browsers
-	if (typeof String.prototype.trim !== 'function') {
-		String.prototype.trim = function() {
-			return this.replace(/^\s+|\s+$/g, '');
-		};
-	}
-})();
+    // add support for old browsers
+    if (typeof String.prototype.trim !== 'function') {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, '');
+        };
+    }
+})(jQuery, Firebase, marked, md);
