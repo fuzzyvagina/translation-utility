@@ -126,6 +126,7 @@
             });
 
             $('textarea').elastic();
+            $('.doc-buttons').show();
         },
 
         isLoggedIn = function (ev) {
