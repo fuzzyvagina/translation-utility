@@ -133,23 +133,19 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
   margin: 0;
 }
 .key {
-  margin-left: 0;
-  padding-top: 6px;
+  font: 10px/1em monospace;
+  margin: 0 0 0.5em;
+  color: #fedce8;
 }
-.key:after {
-  content: '•';
-  position: absolute;
-  left: 15px;
-  border-bottom: 1px dashed #ddd;
-  width: 100%;
-  z-index: 7;
-  color: transparent;
+.master {
+  max-height: 500px;
+  overflow: auto;
 }
 .value {
   height: 34px;
   max-height: 500px;
   padding: 6px 12px;
-  margin: 0 0 5px;
+  margin-bottom: 5px;
   font-size: 14px;
   line-height: 1.428571429;
   color: #555555;

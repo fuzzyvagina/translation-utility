@@ -9,23 +9,23 @@
         json,
         currentValue,
         locale = window.location.search.replace('?', '') || '',
-        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/' + locale),
+        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
         authData = fire.getAuth(),
 
         stylise = function (el) {
-            $(el).attr('class', 'col-xs-5 value')
-                .prev().attr('class', 'col-xs-2 key')
+            $(el).attr('class', 'col-xs-4 master')
+                .prev().attr('class', 'key')
                 .parent().attr('class', 'row');
         },
 
-        htmlToMarkdown = function (i, el) {
-            var txt = el.value,
+        htmlToMarkdown = function ($el, key) {
+            var txt = $el.html(),
                 markedDown;
 
-            if (htmlPattern.test(txt)) {
-                markedDown = md(txt);
-                $article.find('[title=\'' + el.title + '\']').val(markedDown);
-            }
+            if (!htmlPattern.test(txt)) { return; }
+
+            markedDown = md(txt);
+            $article.find('[title=\'' + key + '\']').val(markedDown);
         },
 
         storeCurrent = function (ev) {
@@ -37,7 +37,7 @@
             var html = marked(el.value);
 
             if (!el.$preview) {
-                el.$preview = $('<div class="preview col-xs-5"/>').insertAfter(el);
+                el.$preview = $('<div class="preview col-xs-4"/>').insertAfter(el);
             }
 
             // if el has only one p tag remove it.
@@ -109,11 +109,16 @@
                 isModified = 1;
             }).removeClass('modified');
 
-            console.log(json);
-
             if (!isModified) return;
 
             fire.set(json, onSaveFeedback);
+        },
+
+        addTranslation = function ($el, key) {
+            var copy = eval('json.' + locale + key.replace('root', '')),
+                $translation = $('<textarea/>').addClass('col-xs-4 value').attr('title', key).html(copy);
+
+            $el.after($translation);
         },
 
         render = function (data) {
@@ -124,10 +129,14 @@
                 return;
             }
 
-            $article.empty().renderJSON(json);
+            $article.empty().renderJSON(json.master);
 
-            $('.renderjson-scalar', $article).each(function (key, el) {
-                htmlToMarkdown(key, el);
+            $('.renderjson-scalar', $article).each(function (i, el) {
+                var $el = $(el),
+                    key = $el.data('key');
+
+                addTranslation($el, key);
+                htmlToMarkdown($el, key);
                 stylise(el);
             });
 
