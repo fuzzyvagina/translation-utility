@@ -181,6 +181,11 @@ module.exports = function (grunt) {
                     '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                     '<%= yeoman.dist %>/styles/fonts/*'
                 ]
+            },
+            locales: {
+                src: [
+                    '<%= yeoman.dist %>/locales/{,*/}*.json'
+                ]
             }
         },
 
@@ -363,7 +368,7 @@ module.exports = function (grunt) {
                 // this is redacted from the public repo... add a file called ./config/auth.json
                 // with your token in it... { "token": "my token here" }
                 //
-                token: '<%= appConfig.authConfig.token %>'
+                token: '<%= yeoman.authConfig.token %>'
             },
             getMyFiles: {
                 options: {
@@ -389,7 +394,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'wiredep',
+            // 'wiredep',
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',
@@ -407,7 +412,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'wiredep',
+        // 'wiredep',
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
@@ -422,9 +427,15 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
+    grunt.registerTask('localise', [
+        'firebase',
+        'newer:filerev:locales',
+    ]);
+
     grunt.registerTask('default', [
         'newer:jshint',
-        'test',
-        'build'
+        // 'test',
+        'build',
+        'localise'
     ]);
 };
