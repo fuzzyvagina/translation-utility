@@ -172,7 +172,20 @@ article {
 .key {
 	font: 10px/1em monospace;
 	margin: 0 0 0.5em;
-	color: #fedce8;
+	color: #53ffc7;
+
+	&:hover {
+		color: #f00;
+	}
+}
+
+
+.master,
+.preview,
+.scroller {
+	& > *:first-child {
+		margin-top: 0;
+	}
 }
 
 .master {

@@ -80,8 +80,9 @@
             while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
                 obj = obj[p];
 
-            if (p)
+            if (p) {
                 obj[p] = newValue;
+            }
         },
 
         onSaveFeedback = function (error) {
@@ -105,13 +106,13 @@
                 var node = el.title,
                     newValue = el.$preview.html();
 
-                changeJsonValue(json, node, newValue);
+                changeJsonValue(json[locale], node, newValue);
                 isModified = 1;
             }).removeClass('modified');
 
             if (!isModified) return;
 
-            fire.set(json, onSaveFeedback);
+            fire.update(json, onSaveFeedback);
         },
 
         addTranslation = function ($el, key) {

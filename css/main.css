@@ -135,7 +135,15 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
 .key {
   font: 10px/1em monospace;
   margin: 0 0 0.5em;
-  color: #fedce8;
+  color: #53ffc7;
+}
+.key:hover {
+  color: #f00;
+}
+.master > *:first-child,
+.preview > *:first-child,
+.scroller > *:first-child {
+  margin-top: 0;
 }
 .master {
   max-height: 500px;
