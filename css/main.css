@@ -78,8 +78,11 @@ textarea {
 body {
   background: #f8f8f8;
 }
+h1 {
+  border-bottom: 1px solid;
+}
 header {
-  padding: 0 10%;
+  padding: 0 3%;
   color: #fff;
   background: #0B486B;
 }
@@ -102,32 +105,10 @@ header .doc-buttons {
   color: #f00;
 }
 article {
-  margin: 70px 2%;
+  margin: 80px 3%;
 }
-article > .renderjson-value {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-article > .renderjson-value > .renderjson-pair > .renderjson-key {
-  font-size: 18px;
-  border-bottom: 1px solid;
-}
-.renderjson-value,
-.renderjson-key {
-  float: none;
-}
-.renderjson-object {
-  border: none;
-}
-.renderjson-array {
-  border: none;
-}
-.renderjson-array .renderjson-pair {
-  border: 1px dashed #cdcdcd;
-}
-.renderjson-array .renderjson-pair + .renderjson-pair {
-  border-top-color: transparent;
+.md-notice {
+  margin-bottom: 0;
 }
 .row {
   margin: 0;
@@ -147,6 +128,7 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
 }
 .master {
   max-height: 500px;
+  margin-top: 7px;
   overflow: auto;
 }
 .value {
@@ -178,7 +160,7 @@ article > .renderjson-value > .renderjson-pair > .renderjson-key {
 }
 .preview {
   max-height: 500px;
-  margin-top: 6px;
+  margin-top: 7px;
   overflow: auto;
 }
 .alert {

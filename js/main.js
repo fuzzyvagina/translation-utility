@@ -2,30 +2,76 @@
 
     'use strict';
 
-    var masterfile = 'locales/master.json',
+    // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+    JSON.flatten = function (data, isMaster) {
+        var result = {};
+
+        function recurse(cur, prop) {
+            var depth = 0;
+            if (Object(cur) !== cur) {
+                result[prop] = cur;
+            } else if (Array.isArray(cur)) {
+                for (var i = 0, l = cur.length; i < l; i++)
+                    recurse(cur[i], prop + "[" + i + "]");
+                if (l == 0)
+                    result[prop] = [];
+            } else {
+                var isEmpty = true;
+                for (var p in cur) {
+                    isEmpty = false;
+                    // add titles to sections
+                    addTitles(result, prop, depth, isMaster);
+                    recurse(cur[p], prop ? prop + "." + p : p);
+                }
+                if (isEmpty && prop)
+                    result[prop] = {};
+            }
+        }
+        recurse(data, "");
+        return result;
+    };
+
+    JSON.unflatten = function (data) {
+        if (Object(data) !== data || Array.isArray(data))
+            return data;
+        var regex = /\.?([^.\[\]]+)|\[(\d+)\]/g,
+            resultholder = {};
+        for (var p in data) {
+            var cur = resultholder,
+                prop = "",
+                m;
+            while (m = regex.exec(p)) {
+                cur = cur[prop] || (cur[prop] = (m[2] ? [] : {}));
+                prop = m[2] || m[1];
+            }
+            cur[prop] = data[p];
+        }
+        return resultholder[""] || resultholder;
+    };
+
+
+    var ALLOW_MD = true,
+        masterfile = 'locales/master.json',
         $article = $('article'),
         $alert = $('.alert'),
         htmlPattern = /<[a-z][\s\S]*>/i,
+        locale = window.location.search.replace('?', '') || '',
+        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/saeco/'),
+        authData = fire.getAuth(),
         json,
         currentValue,
-        locale = window.location.search.replace('?', '') || '',
-        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
-        authData = fire.getAuth(),
 
-        stylise = function (el) {
-            $(el).attr('class', 'col-xs-4 master')
-                .prev().attr('class', 'key')
-                .parent().attr('class', 'row');
+        addTitles = function (result, prop, depth, isMaster) {
+            if (!isMaster) { return; }
+            depth++;
+            if (depth === 1 && prop) {
+                var title = prop + '.$display_title_'+prop.split('.').length;
+                result[title] = prop.split('.').pop();
+            }
         },
 
-        htmlToMarkdown = function ($el, key) {
-            var txt = $el.html(),
-                markedDown;
-
-            if (!htmlPattern.test(txt)) { return; }
-
-            markedDown = md(txt);
-            $article.find('[title=\'' + key + '\']').val(markedDown);
+        htmlToMarkdown = function (txt) {
+            return ALLOW_MD && htmlPattern.test(txt) ? md(txt) : txt;
         },
 
         storeCurrent = function (ev) {
@@ -122,24 +168,47 @@
             $el.after($translation);
         },
 
+        renderTitle = function (key, val) {
+            var depth = Math.min(6, key.split('_').pop()),
+                $row = $('<div class="row"/>'),
+                $heading = $('<h'+depth+'/>').text(val.replace(/_/g, ' '));
+
+            return $row.html($heading);
+        },
+
+        renderTemplate = function (key, master, md) {
+            var colWidth = ALLOW_MD ? 4 : 6,
+                $row = $('<div class="row"/>'),
+                $master = $('<div class="col-xs-'+colWidth+' master"/>').html(master),
+                $localisation = $('<textarea class="col-xs-'+colWidth+' value"/>').attr('title', key).text(md),
+                $key = $('<div class="key"/>').text(key);
+
+            return $row.append($key, $master, $localisation);
+        },
+
         render = function (data) {
             json = data.exportVal();
 
-            if (!json) {
+            if (!json[locale]) {
                 $article.html('<h3>Locale not found</h3><p>Make sure the url is correct</p>');
                 return;
             }
 
-            $article.empty().renderJSON(json.master);
+            var flatMaster = JSON.flatten(json.master, true), // isMaster = true
+                flatSlave = JSON.flatten(json[locale]),
+                html = '<h5 class="md-notice">You may use Markdown</h5><small>Markdown is a plain text formatting syntax designed so that it optionally can be converted to HTML. For more info see the <a href="http://support.mashery.com/docs/read/customizing_your_portal/Markdown_Cheat_Sheet" target="_blank">list of codes</a>.</small>';
 
-            $('.renderjson-scalar', $article).each(function (i, el) {
-                var $el = $(el),
-                    key = $el.data('key');
+            $.each(flatMaster, function(key, val){
+                var md = htmlToMarkdown(flatSlave[key]);
 
-                addTranslation($el, key);
-                htmlToMarkdown($el, key);
-                stylise(el);
+                if (key.indexOf('$display_title') > -1) {
+                    html+=renderTitle(key, val).prop('outerHTML');
+                } else {
+                    html+=renderTemplate(key, val, md).prop('outerHTML');
+                }
             });
+
+            $article.html(html);
 
             $('textarea').elastic();
             $('.doc-buttons').show();

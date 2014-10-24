@@ -98,8 +98,12 @@ body {
 	background: #f8f8f8;
 }
 
+h1 {
+	border-bottom: 1px solid;
+}
+
 header {
-	padding: 0 10%;
+	padding: 0 3%;
 	color: #fff;
 	background: #0B486B;
 
@@ -127,42 +131,11 @@ header {
 }
 
 article {
-	margin: 70px 2%;
-
-	& > .renderjson-value {
-		border: none;
-		margin: 0;
-		padding: 0;
-
-		& > .renderjson-pair {
-			// border: 1px solid red;
-
-			& > .renderjson-key {
-				font-size: 18px;
-				border-bottom: 1px solid;
-			}
-		}
-	}
+	margin: 80px 3%;
 }
 
-.renderjson-value, .renderjson-key {
-	float: none;
-}
-
-.renderjson-object {
-	border: none;
-}
-
-.renderjson-array {
-	border: none;
-
-	.renderjson-pair {
-		border: 1px dashed #cdcdcd;
-
-		& + .renderjson-pair {
-			border-top-color: transparent;
-		}
-	}
+.md-notice {
+	margin-bottom: 0;
 }
 
 .row {
@@ -190,6 +163,7 @@ article {
 
 .master {
 	max-height: 500px;
+	margin-top: 7px;
 	overflow: auto;
 }
 
@@ -226,7 +200,7 @@ article {
 
 .preview {
 	max-height: 500px;
-	margin-top: 6px;
+	margin-top: 7px;
 	overflow: auto;
 }
 
