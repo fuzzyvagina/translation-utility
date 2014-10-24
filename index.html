@@ -32,13 +32,14 @@
 				<button id="save" type="button" class="btn btn-primary">Save</button>
 			</div>
 			<h3>Translation utility</h3>
+			<div id="alerts" class="alerts" role="alert"></div>
 		</header>
 
 		<div class="alert"></div>
 
 		<article>
-			<div class="row">
-				<div class="col-xs-6 col-xs-offset-3">
+			<section id="login" class="row">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">
 					<h3>Log in</h3>
 					<p>You must log in to edit the translations</p>
 
@@ -54,9 +55,14 @@
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
 				</div>
+			</section>
 
+			<section id="md-notice">
+				<h5 class="md-notice">You may use Markdown</h5>
+				<p><small>Markdown is a plain text formatting syntax designed so that it optionally can be converted to HTML. For more info see the <a href="http://support.mashery.com/docs/read/customizing_your_portal/Markdown_Cheat_Sheet" target="_blank">list of codes</a>.</small></p>
+			</section>
 
-			</div>
+			<section id="content"></section>
 		</article>
 
 		<script id="title-template" type="text/x-mustache-template">
@@ -68,7 +74,7 @@
 		<script id="entry-template" type="text/x-mustache-template">
 			<div class="row">
 				<div class="key">{{key}}</div>
-				<div class="{{#hasPreview}}col-xs-4{{/hasPreview}}{{^hasPreview}}col-xs-6{{/hasPreview}} master">{{master}}</div>
+				<div class="{{#hasPreview}}col-xs-4{{/hasPreview}}{{^hasPreview}}col-xs-6{{/hasPreview}} master">{{{master}}}</div>
 				<textarea class="{{#hasPreview}}col-xs-4{{/hasPreview}}{{^hasPreview}}col-xs-6{{/hasPreview}} value" title="{{key}}">{{slave}}</textarea>
 			</div>
 		</script>

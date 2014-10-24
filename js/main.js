@@ -50,10 +50,11 @@
     };
 
 
-    var ALLOW_MD = 0,
+    var ALLOW_MD = true,
         masterfile = 'locales/master.json',
         $article = $('article'),
-        $alert = $('.alert'),
+        $alert = $('#alerts'),
+        $login = $article.find('#login'),
         htmlPattern = /<[a-z][\s\S]*>/i,
         locale = window.location.search.replace('?', '') || '',
         fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
@@ -64,6 +65,7 @@
         flatSlave,
         json,
         currentValue,
+        alertTimer,
 
         addTitles = function (result, prop, depth, isMaster) {
             if (!isMaster) { return; }
@@ -72,6 +74,14 @@
                 var title = prop + '.$display_title_'+prop.split('.').length;
                 result[title] = prop.split('.').pop();
             }
+        },
+
+        showAlert = function (message, className) {
+            $alert.attr('class', 'alert alert-'+className).html(message).show();
+            clearTimeout(alertTimer);
+            alertTimer = setTimeout(function() {
+                $alert.hide();
+            }, 7000);
         },
 
         htmlToMarkdown = function (txt) {
@@ -126,9 +136,9 @@
 
         onSaveFeedback = function (error) {
             if (error) {
-                alert("Data could not be saved. " + error);
+                showAlert('<strong>Not be saved!</strong> ' + error, 'danger');
             } else {
-                console.log("Data saved successfully.");
+                showAlert('<strong>Done.</strong> Data saved successfully.', 'success');
             }
         },
 
@@ -140,6 +150,8 @@
                 isModified;
 
             $(':focus').blur();
+
+            showAlert('<strong>Saving…</strong>', 'info');
 
             $article.find('.modified').each(function (key, el) {
                 var node = el.title,
@@ -162,35 +174,31 @@
             $el.after($translation);
         },
 
-        renderTitle = function (key, val) {
-            var depth = Math.min(6, key.split('_').pop()),
-                $row = $('<div class="row"/>'),
-                $heading = $('<h'+depth+'/>').text(val);
-
-            return $row.html($heading);
-        },
-
         render = function (data) {
+            var rendered;
+
             json = data.exportVal();
 
             if (!json[locale]) {
-                $article.html('<h3>Locale not found</h3><p>Make sure the url is correct</p>');
+                showAlert('<strong>File not found.</strong> Make sure the url is correct', 'danger');
                 return;
+
+            } else if (ALLOW_MD) {
+                $article.find('#md-notice').show();
             }
 
-            flatMaster = JSON.flatten(json.master, true) // isMaster = true
-            flatSlave = JSON.flatten(json[locale])
-            var html = ALLOW_MD ? '<h5 class="md-notice">You may use Markdown</h5><small>Markdown is a plain text formatting syntax designed so that it optionally can be converted to HTML. For more info see the <a href="http://support.mashery.com/docs/read/customizing_your_portal/Markdown_Cheat_Sheet" target="_blank">list of codes</a>.</small>' : '';
+            flatMaster = JSON.flatten(json.master, true); // isMaster = true
+            flatSlave = JSON.flatten(json[locale]);
 
             $.each(flatMaster, function(key, val) {
                 if (key.indexOf('$display_title') > -1) {
-                    html += Mustache.render(titleTpl, {
+                    rendered += Mustache.render(titleTpl, {
                         title: val.replace(/_/g, ' '),
                         heading: Math.min(6, key.split('_').pop())
                     });
 
                 } else {
-                    html += Mustache.render(entryTpl, {
+                    rendered += Mustache.render(entryTpl, {
                         key: key,
                         master: val,
                         slave: htmlToMarkdown(flatSlave[key]),
@@ -199,13 +207,14 @@
                 }
             });
 
-            $article.html(html);
+            $article.find('#content').html(rendered);
 
             $('textarea').elastic();
             $('.doc-buttons').show();
         },
 
         isLoggedIn = function (ev) {
+            $login.hide();
             // get data from firebase
             fire.once('value', render);
         },

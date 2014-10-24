@@ -95,6 +95,12 @@ header .doc-buttons {
   margin-top: 15px;
   float: right;
 }
+header .alerts {
+  display: none;
+}
+header .alert {
+  top: 7px;
+}
 .reset {
   background: transparent;
   color: #ddd;
@@ -109,6 +115,7 @@ article {
 }
 .md-notice {
   margin-bottom: 0;
+  line-height: 20px;
 }
 .row {
   margin: 0;
@@ -126,6 +133,7 @@ article {
   margin-top: 0;
 }
 .master {
+  left: -15px;
   max-height: 500px;
   margin-top: 7px;
   overflow: auto;
