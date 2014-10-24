@@ -50,14 +50,18 @@
     };
 
 
-    var ALLOW_MD = true,
+    var ALLOW_MD = 0,
         masterfile = 'locales/master.json',
         $article = $('article'),
         $alert = $('.alert'),
         htmlPattern = /<[a-z][\s\S]*>/i,
         locale = window.location.search.replace('?', '') || '',
-        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/saeco/'),
+        fire = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
         authData = fire.getAuth(),
+        titleTpl = $("#title-template").html(),
+        entryTpl = $("#entry-template").html(),
+        flatMaster,
+        flatSlave,
         json,
         currentValue,
 
@@ -81,6 +85,8 @@
 
         previewChanges = function (el) {
             var html = marked(el.value);
+
+            if (!ALLOW_MD) { return; }
 
             if (!el.$preview) {
                 el.$preview = $('<div class="preview col-xs-4"/>').insertAfter(el);
@@ -118,19 +124,6 @@
             location.reload();
         },
 
-        // update value in json object to match what changed in editor
-        changeJsonValue = function (obj, strProp, newValue) {
-            var re = /\["?([^"\]]+)"?\]/g,
-                m, p;
-
-            while ((m = re.exec(strProp)) && typeof obj[p = m[1]] === 'object')
-                obj = obj[p];
-
-            if (p) {
-                obj[p] = newValue;
-            }
-        },
-
         onSaveFeedback = function (error) {
             if (error) {
                 alert("Data could not be saved. " + error);
@@ -148,16 +141,17 @@
 
             $(':focus').blur();
 
-            $('.modified').each(function (key, el) {
+            $article.find('.modified').each(function (key, el) {
                 var node = el.title,
-                    newValue = el.$preview.html();
+                    newValue = ALLOW_MD ? el.$preview.html() : el.value;
 
-                changeJsonValue(json[locale], node, newValue);
+                flatSlave[node] = newValue;
                 isModified = 1;
             }).removeClass('modified');
 
             if (!isModified) return;
 
+            json[locale] = JSON.unflatten(flatSlave);
             fire.update(json, onSaveFeedback);
         },
 
@@ -171,19 +165,9 @@
         renderTitle = function (key, val) {
             var depth = Math.min(6, key.split('_').pop()),
                 $row = $('<div class="row"/>'),
-                $heading = $('<h'+depth+'/>').text(val.replace(/_/g, ' '));
+                $heading = $('<h'+depth+'/>').text(val);
 
             return $row.html($heading);
-        },
-
-        renderTemplate = function (key, master, md) {
-            var colWidth = ALLOW_MD ? 4 : 6,
-                $row = $('<div class="row"/>'),
-                $master = $('<div class="col-xs-'+colWidth+' master"/>').html(master),
-                $localisation = $('<textarea class="col-xs-'+colWidth+' value"/>').attr('title', key).text(md),
-                $key = $('<div class="key"/>').text(key);
-
-            return $row.append($key, $master, $localisation);
         },
 
         render = function (data) {
@@ -194,17 +178,24 @@
                 return;
             }
 
-            var flatMaster = JSON.flatten(json.master, true), // isMaster = true
-                flatSlave = JSON.flatten(json[locale]),
-                html = '<h5 class="md-notice">You may use Markdown</h5><small>Markdown is a plain text formatting syntax designed so that it optionally can be converted to HTML. For more info see the <a href="http://support.mashery.com/docs/read/customizing_your_portal/Markdown_Cheat_Sheet" target="_blank">list of codes</a>.</small>';
+            flatMaster = JSON.flatten(json.master, true) // isMaster = true
+            flatSlave = JSON.flatten(json[locale])
+            var html = ALLOW_MD ? '<h5 class="md-notice">You may use Markdown</h5><small>Markdown is a plain text formatting syntax designed so that it optionally can be converted to HTML. For more info see the <a href="http://support.mashery.com/docs/read/customizing_your_portal/Markdown_Cheat_Sheet" target="_blank">list of codes</a>.</small>' : '';
 
-            $.each(flatMaster, function(key, val){
-                var md = htmlToMarkdown(flatSlave[key]);
-
+            $.each(flatMaster, function(key, val) {
                 if (key.indexOf('$display_title') > -1) {
-                    html+=renderTitle(key, val).prop('outerHTML');
+                    html += Mustache.render(titleTpl, {
+                        title: val.replace(/_/g, ' '),
+                        heading: Math.min(6, key.split('_').pop())
+                    });
+
                 } else {
-                    html+=renderTemplate(key, val, md).prop('outerHTML');
+                    html += Mustache.render(entryTpl, {
+                        key: key,
+                        master: val,
+                        slave: htmlToMarkdown(flatSlave[key]),
+                        hasPreview: ALLOW_MD
+                    });
                 }
             });
 
@@ -238,8 +229,8 @@
 
         };
 
-    // upload initial file
-    // $.get(masterfile, render);
+    Mustache.parse(titleTpl);
+    Mustache.parse(entryTpl);
 
     // initialise markdown preview renderer
     marked.setOptions({
