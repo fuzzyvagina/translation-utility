@@ -174,7 +174,7 @@
         },
 
         render = function (data) {
-            var rendered;
+            var rendered = '';
 
             json = data.exportVal();
 
@@ -189,7 +189,10 @@
             flatMaster = JSON.flatten(json.master, true); // isMaster = true
             flatSlave = JSON.flatten(json[locale]);
 
+            console.log(flatMaster);
+
             $.each(flatMaster, function(key, val) {
+
                 if (key.indexOf('$display_title') > -1) {
                     rendered += Mustache.render(titleTpl, {
                         title: val.replace(/_/g, ' '),
