@@ -121,10 +121,6 @@ header {
 	.alerts {
 		display: none;
 	}
-
-	.alert {
-		top: 7px;
-	}
 }
 
 .reset {
@@ -205,6 +201,11 @@ article {
 		box-shadow: 0 0 3px 1px #ff0,
 					inset 0 1px 1px rgba(0, 0, 0, 0.075);
 	}
+
+	&:disabled {
+		opacity: 0.5;
+		resize: none;
+	}
 }
 
 .preview {
@@ -215,10 +216,10 @@ article {
 
 .alert {
 	position: absolute;
-	left: 50%;
-	padding: 10px 15px;
-	-webkit-transform: translate(-50%, 0);
-	transform: translate(-50%, 0);
+	width: 96%;
+	left: 2%;
+	top: 100%;
+	margin-top: 5px;
 }
 
 

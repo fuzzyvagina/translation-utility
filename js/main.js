@@ -151,8 +151,6 @@
 
             $(':focus').blur();
 
-            showAlert('<strong>Saving…</strong>', 'info');
-
             $article.find('.modified').each(function (key, el) {
                 var node = el.title,
                     newValue = ALLOW_MD ? el.$preview.html() : el.value;
@@ -163,6 +161,7 @@
 
             if (!isModified) return;
 
+            showAlert('<strong>Saving…</strong>', 'info');
             json[locale] = JSON.unflatten(flatSlave);
             fire.update(json, onSaveFeedback);
         },
@@ -202,7 +201,8 @@
                         key: key,
                         master: val,
                         slave: htmlToMarkdown(flatSlave[key]),
-                        hasPreview: ALLOW_MD
+                        hasPreview: ALLOW_MD,
+                        disabled: key.split('.').pop().indexOf('__') === 0
                     });
                 }
             });
