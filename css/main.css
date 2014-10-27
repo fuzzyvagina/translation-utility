@@ -111,6 +111,9 @@ article {
   margin: 80px 3%;
 }
 .md-notice {
+  display: none;
+}
+.md-notice h5 {
   margin-bottom: 0;
   line-height: 20px;
 }
