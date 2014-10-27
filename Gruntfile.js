@@ -1,17 +1,10 @@
-// Generated on 2014-10-21 using generator-angular 0.9.8
 'use strict';
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
 
     // Configurable paths for the application
     var appConfig = {
-        dist: 'output',
+        dist: 'locales',
         authConfig: grunt.file.readJSON('./config/auth.json')
     };
 
