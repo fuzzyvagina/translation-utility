@@ -5,7 +5,7 @@
   "authors": [
     "JD Willemse"
   ],
-  "description": "utility to help with the creation of localisations",
+  "description": "Utility to help with the creation of localisations",
   "main": "index.html",
   "license": "MIT",
   "private": true,
@@ -14,7 +14,6 @@
     "marked": "~0.3.2",
     "html-md": "~3.0.2",
     "firebase": "~1.1.2",
-    "mustache": "~0.8.2",
-    "handlebars": "~2.0.0"
+    "mustache": "~0.8.2"
   }
 }
