@@ -136,7 +136,9 @@ article {
   left: -15px;
   max-height: 500px;
   margin-top: 7px;
+  overflow-x: hidden;
   overflow: auto;
+  word-wrap: break-word;
 }
 .value {
   height: 34px;
@@ -172,7 +174,9 @@ article {
 .preview {
   max-height: 500px;
   margin-top: 7px;
+  overflow-x: hidden;
   overflow: auto;
+  word-wrap: break-word;
 }
 .alert {
   position: absolute;
@@ -238,10 +242,8 @@ article {
 .clearfix:after {
   content: " ";
   /* 1 */
-
   display: table;
   /* 2 */
-
 }
 .clearfix:after {
   clear: both;
