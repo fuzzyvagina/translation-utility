@@ -4,7 +4,7 @@
 
     var DISABLING_PREFIX = '__',
         ALLOW_MARKDOWN = true,
-        FIRE = new Firebase('https://incandescent-fire-540.firebaseio.com/'),
+        FIRE = new Firebase('https://translation-demo.firebaseio.com/'),
         $article = $('article'),
         $alert = $('#alerts'),
         locale = window.location.search.replace('?', '') || '';

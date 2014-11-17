@@ -29,24 +29,35 @@ module.exports = function (grunt) {
 
         firebase: {
             options: {
-                //
-                // reference to start with (full firebase url)
-                // when downloading, the final segment in the path
-                // will determine the filename where your data goes
-                //
-                reference: 'https://incandescent-fire-540.firebaseio.com/nl_nl',
-
-                //
-                // token is the secret key used for connecting to firebase from the server
-                // this is redacted from the public repo... add a file called ./config/auth.json
-                // with your token in it... { "token": "my token here" }
-                //
-                token: '<%= appConfig.authConfig.token %>'
+                // token is the secret key used for connecting to firebase from the server this is redacted from the public repo... add a file called ./config/auth.json with your token in it... { "token": "my token here" }
+                token: '<%= appConfig.authConfig.token %>',
+                mode: 'download',
+                dest: '<%= appConfig.dist %>/'
             },
-            getMyFiles: {
+            nl_nl: {
                 options: {
-                    mode: 'download',
-                    dest: '<%= appConfig.dist %>/'
+                    // reference to start with (full firebase url) when downloading, the final segment in the path will determine the filename where your data goes
+                    reference: 'https://incandescent-fire-540.firebaseio.com/saeco/nl_nl',
+                }
+            },
+            de_de: {
+                options: {
+                    reference: 'https://incandescent-fire-540.firebaseio.com/saeco/de_de',
+                }
+            },
+            en_gb: {
+                options: {
+                    reference: 'https://incandescent-fire-540.firebaseio.com/saeco/en_gb',
+                }
+            },
+            en_us: {
+                options: {
+                    reference: 'https://incandescent-fire-540.firebaseio.com/saeco/en_us',
+                }
+            },
+            ru_ru: {
+                options: {
+                    reference: 'https://incandescent-fire-540.firebaseio.com/saeco/ru_ru',
                 }
             }
         }
