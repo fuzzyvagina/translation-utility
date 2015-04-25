@@ -7,7 +7,17 @@
         FIRE = new Firebase('https://translation-demo.firebaseio.com/'),
         $article = $('article'),
         $alert = $('#alerts'),
-        locale = window.location.search.replace('?', '') || '';
+        locale = window.location.search.replace('?', '') || '',
+        notifications = {
+        	genericError: '<strong>Something went wrong.</strong> Check console log for more info. Check concole log for more info',
+        	loginFailure: '<strong>Login Failed!</strong> ',
+        	newLocaleCreated: '<strong>New locale added.</strong> You are the first person to edit this document.',
+        	invalidJson: '<strong>Not valid JSON.</strong> The file contains invalid JSON code.',
+        	incorrectFileType: '<strong>Wrong file type.</strong> The master file needs to be a valide JSON file.',
+        	saveFail: '<strong>Not saved!</strong> ',
+        	saveSuccess: '<strong>Done.</strong> Data saved successfully.',
+        	saveProgress: '<strong>Saving…</strong>'
+        };
 
     // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
     JSON.flatten = function (data, isMaster) {
@@ -100,7 +110,7 @@
             password: formData[1].value
         }, function (error) {
             if (error) {
-                this.showAlert('<strong>Login Failed!</strong> ' + error.message, 'danger');
+                this.showAlert(notifications.loginFailure + error.message, 'danger');
                 console.log('Login Failed!', error);
             } else {
                 this.isLoggedIn();
@@ -123,7 +133,7 @@
 		var file = ev.target.files[0]; // FileList object
 
 		if (file.type !== 'application/json') {
-			translationApp.showAlert('<strong>Wrong file type.</strong> The master file needs to be a valide JSON file.', 'danger');
+			translationApp.showAlert(notifications.incorrectFileType, 'danger');
 			return;
 		}
 
@@ -140,14 +150,20 @@
     			$('#import').removeClass('show');
     			this.fireBase.child('master').set(JSON.parse(ev.target.result));
     		} catch(err) {
-    			translationApp.showAlert('<strong>Not valid JSON.</strong> The file contains invalid JSON code.', 'danger');
+    			translationApp.showAlert(notifications.invalidJson, 'danger');
     			console.log(err);
     		}
 
     	} else {
-    		translationApp.showAlert('<strong>Something went wrong.</strong> Check console log for more info. Check concole log for more info', 'danger');
+    		translationApp.showAlert(notifications.genericError, 'danger');
     		console.log(ev);
     	}
+    },
+
+    Localiser.prototype.addNewLocale = function (locale) {
+		translationApp.showAlert(notifications.newLocaleCreated, 'info');
+		this.fireBase.child(locale).set(1);
+		this.render();
     },
 
     Localiser.prototype.render = function (data) {
@@ -164,11 +180,16 @@
         Mustache.parse(this.titleTpl);
         Mustache.parse(this.entryTpl);
 
-        if (!this.json[this.locale]) {
-            this.showAlert('<strong>File not found.</strong> Make sure the url is correct', 'danger');
+        if (!this.locale) {
+            $('#locale-warning').addClass('show');
             return;
 
-        } else if (ALLOW_MARKDOWN) {
+        } else if (!this.json[this.locale]) {
+            this.addNewLocale(this.locale);
+        	return;
+        }
+
+        if (ALLOW_MARKDOWN) {
             this.$container.find('#md-notice').show();
         }
 
@@ -251,16 +272,16 @@
 
         if (!isModified) return;
 
-        this.showAlert('<strong>Saving…</strong>', 'info');
+        this.showAlert(notifications.saveProgress, 'info');
         this.json[locale] = JSON.unflatten(this.flatSlave);
         this.fireBase.update(this.json, this.onSaveComplete.bind(this));
     };
 
     Localiser.prototype.onSaveComplete = function (error) {
         if (error) {
-            this.showAlert('<strong>Not be saved!</strong> ' + error, 'danger');
+            this.showAlert(notifications.saveFail + error, 'danger');
         } else {
-            this.showAlert('<strong>Done.</strong> Data saved successfully.', 'success');
+            this.showAlert(notifications.saveSuccess, 'success');
         }
     };
 

@@ -185,10 +185,12 @@ article {
   top: 100%;
   margin-top: 5px;
 }
-.import-wrap {
+.import-wrap,
+.locale-warning {
   display: none;
 }
-.import-wrap.show {
+.import-wrap.show,
+.locale-warning.show {
   display: block;
 }
 /* ==========================================================================
