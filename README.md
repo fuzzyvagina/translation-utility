@@ -6,18 +6,17 @@ This utility is meant to make the localization of web apps easier by providing a
 
 ## Installation
 1. Create a Firebase database
-2. Create a object named 'master' in your database
-3. Import your structured JSON file that will serve ass the translation master to this object
-4. Create object which will hold translation. This object can be prefilled with an import if it exists
-5. Create a user in Firebase, because login is required to edit files
-6. In the url the object to translate is specified as a query: ?nl_nl
+2. Create a user in Firebase, because login is required to edit files
+3. Add database name to main.js file
+4. After login follow instructions to import your structured JSON file that will serve as the translation master
+5. In the url the object to translate is specified as a query (?nl_nl). A new translation will be created if it does not exist
 
 ## Export
 To export data from Firebase create a file auth.json in the config folder with you Firebase secret token {"token": "TOKEN_VALUE"}. In Gruntfile you specify the translation to export and then run the default grunt task. This will export your file to the locales folder.
 
 ## Features
 
-* A masterfile with the JSON fields that need translation can be used as a template for translation.
+* A masterfile with the JSON fields that need translation is used as a template for translation.
 * Fields that are present in the master file but not in the locale will be added when data a translation is added.
 * Fields that are present in the locale file but not in the master will not be removed so translated text is not lost when master changes.
 * Prefixing a key with two underscores renderes it uneditable.
