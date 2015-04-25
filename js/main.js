@@ -100,7 +100,7 @@
             password: formData[1].value
         }, function (error) {
             if (error) {
-                this.showAlert('<strong>Login Failed!</strong> ' + error.message);
+                this.showAlert('<strong>Login Failed!</strong> ' + error.message, 'danger');
                 console.log('Login Failed!', error);
             } else {
                 this.isLoggedIn();
@@ -111,14 +111,55 @@
     Localiser.prototype.isLoggedIn = function () {
         this.$container.find('#login').hide();
         // get data from firebase
-        this.fireBase.once('value', this.render.bind(this));
-
+        this.fireBase.on('value', this.render.bind(this));
     };
+
+    Localiser.prototype.importMaster = function () {
+    	var $wrap = $('#import');
+		$wrap.addClass('show').find('input').on('change', this.handleFileSelect.bind(this));
+    };
+
+    Localiser.prototype.handleFileSelect = function (ev) {
+		var file = ev.target.files[0]; // FileList object
+
+		if (file.type !== 'application/json') {
+			translationApp.showAlert('<strong>Wrong file type.</strong> The master file needs to be a valide JSON file.', 'danger');
+			return;
+		}
+
+		var reader = new FileReader();
+
+		reader.onloadend = this.processUploadedFile.bind(this);
+		reader.readAsBinaryString(file);
+    };
+
+    Localiser.prototype.processUploadedFile = function (ev) {
+		// If we use onloadend, we need to check the readyState.
+    	if (ev.target.readyState == FileReader.DONE) { // DONE == 2
+    		try {
+    			$('#import').removeClass('show');
+    			this.fireBase.child('master').set(JSON.parse(ev.target.result));
+    		} catch(err) {
+    			translationApp.showAlert('<strong>Not valid JSON.</strong> The file contains invalid JSON code.', 'danger');
+    			console.log(err);
+    		}
+
+    	} else {
+    		translationApp.showAlert('<strong>Something went wrong.</strong> Check console log for more info. Check concole log for more info', 'danger');
+    		console.log(ev);
+    	}
+    },
 
     Localiser.prototype.render = function (data) {
         var rendered = '';
 
-        this.json = data.exportVal();
+        this.json = data && data.exportVal() || this.json;
+        console.log('render', this.json);
+
+        if (!this.json.master) {
+        	this.importMaster();
+        	return;
+        }
 
         Mustache.parse(this.titleTpl);
         Mustache.parse(this.entryTpl);
