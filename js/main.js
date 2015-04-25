@@ -14,6 +14,7 @@
         	newLocaleCreated: '<strong>New locale added.</strong> You are the first person to edit this document.',
         	invalidJson: '<strong>Not valid JSON.</strong> The file contains invalid JSON code.',
         	incorrectFileType: '<strong>Wrong file type.</strong> The master file needs to be a valide JSON file.',
+        	fetchingData: '<strong>Fetching your data…</strong> The files are being fetched from Firebase. This may take a few seconds.',
         	saveFail: '<strong>Not saved!</strong> ',
         	saveSuccess: '<strong>Done.</strong> Data saved successfully.',
         	saveProgress: '<strong>Saving…</strong>'
@@ -96,7 +97,7 @@
         this.alertTimer = setTimeout(this.hideAlert.bind(this), 7000);
     };
 
-    Localiser.prototype.hideAlert = function (message, type) {
+    Localiser.prototype.hideAlert = function () {
         this.$alert.hide();
     };
 
@@ -120,6 +121,7 @@
 
     Localiser.prototype.isLoggedIn = function () {
         this.$container.find('#login').hide();
+		this.showAlert(notifications.fetchingData, 'info');
         // get data from firebase
         this.fireBase.on('value', this.render.bind(this));
     };
@@ -133,7 +135,7 @@
 		var file = ev.target.files[0]; // FileList object
 
 		if (file.type !== 'application/json') {
-			translationApp.showAlert(notifications.incorrectFileType, 'danger');
+			this.showAlert(notifications.incorrectFileType, 'danger');
 			return;
 		}
 
@@ -150,18 +152,18 @@
     			$('#import').removeClass('show');
     			this.fireBase.child('master').set(JSON.parse(ev.target.result));
     		} catch(err) {
-    			translationApp.showAlert(notifications.invalidJson, 'danger');
+    			this.showAlert(notifications.invalidJson, 'danger');
     			console.log(err);
     		}
 
     	} else {
-    		translationApp.showAlert(notifications.genericError, 'danger');
+    		this.showAlert(notifications.genericError, 'danger');
     		console.log(ev);
     	}
     },
 
     Localiser.prototype.addNewLocale = function (locale) {
-		translationApp.showAlert(notifications.newLocaleCreated, 'info');
+		this.showAlert(notifications.newLocaleCreated, 'info');
 		this.fireBase.child(locale).set(1);
 		this.render();
     },
@@ -170,7 +172,6 @@
         var rendered = '';
 
         this.json = data && data.exportVal() || this.json;
-        console.log('render', this.json);
 
         if (!this.json.master) {
         	this.importMaster();
@@ -215,6 +216,7 @@
             }
         }.bind(this));
 
+        this.hideAlert();
         this.$container.find('#content').html(rendered);
 
         $('textarea').elastic();
