@@ -14,7 +14,8 @@
         	newLocaleCreated: '<strong>New locale added.</strong> You are the first person to edit this document.',
         	invalidJson: '<strong>Not valid JSON.</strong> The file contains invalid JSON code.',
         	incorrectFileType: '<strong>Wrong file type.</strong> The master file needs to be a valide JSON file.',
-        	fetchingData: '<strong>Fetching your data…</strong> The files are being fetched from Firebase. This may take a few seconds.',
+        	uploadingFile: '<strong>Uploading master file…</strong> Data is being synced with Firebase.',
+        	fetchingData: '<strong>Fetching your data…</strong> The files are being fetched from Firebase.',
         	saveFail: '<strong>Not saved!</strong> ',
         	saveSuccess: '<strong>Done.</strong> Data saved successfully.',
         	saveProgress: '<strong>Saving…</strong>'
@@ -123,26 +124,26 @@
         this.$container.find('#login').hide();
 		this.showAlert(notifications.fetchingData, 'info');
         // get data from firebase
-        this.fireBase.on('value', this.render.bind(this));
+        this.fireBase.once('value', this.render.bind(this));
     };
 
     Localiser.prototype.importMaster = function () {
     	var $wrap = $('#import');
+    	this.hideAlert();
 		$wrap.addClass('show').find('input').on('change', this.handleFileSelect.bind(this));
     };
 
     Localiser.prototype.handleFileSelect = function (ev) {
-		var file = ev.target.files[0]; // FileList object
+		var file = ev.target.files[0], // FileList object
+			reader = new FileReader();
 
 		if (file.type !== 'application/json') {
 			this.showAlert(notifications.incorrectFileType, 'danger');
 			return;
 		}
 
-		var reader = new FileReader();
-
 		reader.onloadend = this.processUploadedFile.bind(this);
-		reader.readAsBinaryString(file);
+		reader.readAsText(file);
     };
 
     Localiser.prototype.processUploadedFile = function (ev) {
@@ -150,6 +151,8 @@
     	if (ev.target.readyState == FileReader.DONE) { // DONE == 2
     		try {
     			$('#import').removeClass('show');
+    			this.json.master = JSON.parse(ev.target.result)
+    			this.render();
     			this.fireBase.child('master').set(JSON.parse(ev.target.result));
     		} catch(err) {
     			this.showAlert(notifications.invalidJson, 'danger');
@@ -219,8 +222,12 @@
         this.hideAlert();
         this.$container.find('#content').html(rendered);
 
-        $('textarea').elastic();
+
         $('.doc-buttons').show();
+        // timeout is used to stop textareaAutoSize from blocking render of page
+        setTimeout(function() {
+	        $('textarea').textareaAutoSize();
+	    }, 0);
     };
 
     Localiser.prototype.htmlToMarkdown = function (txt) {
