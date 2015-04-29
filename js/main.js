@@ -65,7 +65,7 @@
             }
             cur[prop] = data[p];
         }
-        console.log(resultholder[""] || resultholder);
+
         return resultholder[""] || resultholder;
     };
 
@@ -165,12 +165,6 @@
     	}
     },
 
-    Localiser.prototype.addNewLocale = function (locale) {
-		this.showAlert(notifications.newLocaleCreated, 'info');
-		this.fireBase.child(locale).set(1);
-		this.render();
-    },
-
     Localiser.prototype.render = function (data) {
         var rendered = '';
 
@@ -187,10 +181,6 @@
         if (!this.locale) {
             $('#locale-warning').addClass('show');
             return;
-
-        } else if (!this.json[this.locale]) {
-            this.addNewLocale(this.locale);
-        	return;
         }
 
         if (ALLOW_MARKDOWN) {
