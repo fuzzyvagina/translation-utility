@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // Configurable paths for the application
     var appConfig = {
@@ -60,6 +60,40 @@ module.exports = function (grunt) {
                     reference: 'https://incandescent-fire-540.firebaseio.com/saeco/ru_ru',
                 }
             }
+        },
+
+        less: {
+            development: {
+                options: {
+                    compress: true,
+                    yuicompress: true,
+                    optimization: 2
+                },
+                files: {
+                    "css/main.css": "css/main.less" // destination file and source file
+                }
+            }
+        },
+        watch: {
+            styles: {
+                files: ['css/**/*.less'], // which files to watch
+                tasks: ['less'],
+                options: {
+                    nospawn: true
+                }
+            }
+        },
+
+        browserSync: {
+            bsFiles: {
+                src: ['css/*.css', 'js/*.js', 'app/*.html']
+            },
+            options: {
+                server: {
+                    watchTask: true,
+                    baseDir: "./"
+                }
+            }
         }
     });
 
@@ -67,5 +101,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-filerev');
     grunt.loadNpmTasks('grunt-firebase');
 
+    grunt.loadNpmTasks('grunt-browser-sync');
+
     grunt.registerTask('default', ['firebase', 'newer:filerev']);
+    grunt.registerTask('server', ['browserSync']);
 };
