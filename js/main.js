@@ -4,7 +4,7 @@
 
     var DISABLING_PREFIX = '__',
         ALLOW_MARKDOWN = true,
-        FIRE = new Firebase('https://translation-demo.firebaseio.com/'),
+        FIRE = new Firebase('https://translateutil.firebaseio.com/'),
         $article = $('article'),
         $alert = $('#alerts'),
         locale = window.location.search.replace('?', '') || '',
@@ -206,7 +206,8 @@
                     hasPreview: ALLOW_MARKDOWN,
                     disabled: key.split('.').pop().indexOf(DISABLING_PREFIX) === 0
                 });
-            }
+            }              
+
         }.bind(this));
 
         this.hideAlert();
@@ -218,6 +219,25 @@
         setTimeout(function() {
 	        $('textarea').textareaAutoSize();
 	    }, 0);
+
+        //
+        // Copy content from Master to Locale
+        function CopyContent() {
+            setTimeout(function(){
+                $(".copy_content").click(function(){
+                    var parent = $(this).parent(),
+                        masterValue = parent.prev().text(),
+                        input = parent.next(".value");
+
+                    input.text(masterValue);
+                    input.val(masterValue);
+                    input.blur();
+
+                });
+            },1000);
+        }
+        CopyContent();
+
     };
 
     Localiser.prototype.htmlToMarkdown = function (txt) {
@@ -314,6 +334,6 @@
 
     $('#reset').on('click', reset);
     $('#save').on('click', translationApp.save.bind(translationApp));
-
+    
 
 })(jQuery, Firebase, marked, md);
