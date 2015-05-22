@@ -143,17 +143,25 @@ article {
   word-wrap: break-word;
 }
 .copy_text {
-  display: block;
-  float: left;
+  text-align: center;
 }
 .copy_text button {
   width: 26px;
   height: 26px;
-  margin: 4px  20px 0 0;
-  display: block;
+  margin: 1px 0 0 0;
+  padding: 0;
   border: none;
-  background: url(../icons/rightarrow.png) 0 0 no-repeat transparent;
-  background-size: 26px;
+  background: none;
+}
+.copy_text button svg {
+  width: 35px;
+  height: 35px;
+  margin: -3px 0 0 -3px;
+  fill: #ccc;
+  transition: all 0.2s;
+}
+.copy_text button:hover svg {
+  fill: #428bca;
 }
 .value {
   height: 34px;
